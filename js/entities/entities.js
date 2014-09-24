@@ -48,6 +48,93 @@ game.PlayerEntity = me.Entity.extend(
 	}
 });
 
+
+game.EnemyEntity = me.Entity.extend(
+{	
+	init: function (x, y, settings)
+	{
+		this._super(me.Entity, 'init', [x, y , settings]);
+		
+		this.auxX = true;
+		this.auxY = true;
+		
+		this.startY = y;
+		this.pos.y = y+10;
+		this.endY = (settings.y+settings.height) - settings.spriteheight;
+		this.stopY = false;		
+		
+		this.startX = x;
+		this.endX = (settings.x+settings.width) - settings.spritewidth;
+		this.stopX = true;
+		
+		this.body.setVelocity(4, 3);
+		
+		this.collidable = true;
+		this.type = me.game.ENEMY_OBJECT;	
+		this.alwaysUpdate = true
+	},
+	update : function (dt)
+	{
+		
+		if (!this.stopY && (this.pos.y >= this.endY || this.pos.y <= this.startY))
+		{
+			this.stopY = true;
+			this.auxX = true;
+		}
+		
+		if (!this.stopX && (this.pos.x >= this.endX || this.pos.x <= this.startX)) {
+			this.stopX = true;
+			this.auxY = true;
+		}
+		
+		if (this.stopX) {
+			if (this.stopY && this.auxX) {
+				this.vel.y = 0;
+				this.stopX = false;
+				this.auxX = false;
+			}
+			else {
+				if (this.pos.x < this.endX) {
+					this.body.vel.y += this.body.accel.y * me.timer.tick;
+					this.renderable.angle = 3.1;
+				}
+				if (this.pos.x > this.startX) {
+					this.body.vel.y -= this.body.accel.y * me.timer.tick;
+					this.renderable.angle = 0;
+				}
+			}
+		}
+		
+		if (this.stopY) {
+			if (this.stopX && this.auxY) {
+				this.vel.x = 0;
+				this.stopY = false;
+				this.auxY = false;
+			}
+			else {
+				if (this.pos.y > this.endY) {
+					this.vel.x += this.accel.x * me.timer.tick;
+					this.renderable.angle = 1.6;
+				}
+				if (this.pos.y < this.startY) {
+					this.vel.x -= this.accel.x * me.timer.tick;
+					this.renderable.angle = 4.7;
+				}
+			}
+		}
+		
+		
+		this.body.update(dt);
+			
+		if (this.body.vel.x!=0 ||this.body.vel.y!=0)
+		{
+			this._super(me.Entity, 'update', [dt]);
+			return true;
+		}
+		return false;
+	}
+});
+
 game.TrafficLightEntity = me.Entity.extend(
 {
 	init:function (x, y, settings)
@@ -109,6 +196,32 @@ game.BusRoadEntity = me.Entity.extend(
 });
 
 
+game.ArrowEntity = me.Entity.extend({
+init: function (x, y, settings)
+	{
+		this._super(me.Entity, 'init', [x, y , settings]);
+		
+		var self = this;
+		this.renderable.addAnimation("arrow", [0]);
+		this.renderable.setCurrentAnimation("arrow", function(){self.renderable.setCurrentAnimation("point"); self.status = "OK";})
+	},
+	update: function() {			
+			var entidadeJogador = me.game.world.getChildByName("mainPlayer")[0];
+			var entidadePassageiro = me.game.world.getChildByName("passagerEntity")[0];
+			var angle = this.angleTo(entidadePassageiro) +  (90 * (Math.PI/180));
+		
+			this.renderable.angle = angle;
+			this.pos.x = entidadeJogador.pos.x;
+            this.pos.y = entidadeJogador.pos.y;
+			this.body.pos.x = entidadeJogador.pos.x;
+			this.body.pos.y = entidadeJogador.pos.y;
+			
+			this.pos.sub({x: entidadeJogador.pos.x, y: entidadeJogador.pos.y});
+			this.updateBounds();
+			this.body.update();
+	}
+});
+
 game.PassagerEntity = me.Entity.extend(
 {
 	init: function (x, y, settings)
@@ -116,6 +229,11 @@ game.PassagerEntity = me.Entity.extend(
 		var tileSortido = this.obterTileCalcada();
 		this._super(me.Entity, 'init', [tileSortido.pos.x, tileSortido.pos.y , settings]);
 
+		this.body.getShape().setShape(0, 0, [
+			new me.Vector2d(0, 0), new me.Vector2d(this.width, 0),
+			new me.Vector2d(this.width, this.height), new me.Vector2d(0, this.height)
+		]);
+		
 		this.renderable.addAnimation("passager", [0]);
 		this.renderable.addAnimation("point", [1]);
 
@@ -126,29 +244,27 @@ game.PassagerEntity = me.Entity.extend(
 		this.type = me.game.ENEMY_OBJECT;
 	},
 	update: function(dt) {
+		this.body.update();
 		me.collision.check(this, true, this.collideHandler.bind(this), true);
-			console.log(this.entity);
+		
 	},
 	collideHandler : function (response) {
 		if (response.b.name == 'mainplayer') {
-			/*if (this.renderable.isCurrentAnimation("passager")) {
+			if (this.renderable.isCurrentAnimation("passager")) {
 				this.renderable.setCurrentAnimation("point", function(){self.renderable.setCurrentAnimation("point"); self.status = "OK";})
 			}
 			else {
 				this.renderable.setCurrentAnimation("passager", function(){self.renderable.setCurrentAnimation("passager"); self.status = "OK";})
 			}
-			*/
-
+			
 			var tileSortido = this.obterTileCalcada();
-
+			
 			this.pos.x = tileSortido.pos.x;
-			this.pos.y = tileSortido.pos.y;
-			this.body.x = tileSortido.pos.x;
-			this.body.y = tileSortido.pos.y;
-			this.bounds.pos.x = tileSortido.pos.x;
-			this.bounds.pos.y = tileSortido.pos.y;
-			this.renderable.pos.x = tileSortido.pos.x;
-			this.renderable.pos.y = tileSortido.pos.y;
+            this.pos.y = tileSortido.pos.y;
+			this.body.pos.x = tileSortido.pos.x;
+			this.body.pos.y = tileSortido.pos.y;
+			
+			this.pos.sub({x: tileSortido.pos.x, y: tileSortido.pos.y});
 			this.updateBounds();
 
 		}

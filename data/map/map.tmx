@@ -48,7 +48,7 @@
   <object name="ArrowEntity" x="129" y="156" width="96" height="128">
    <properties>
     <property name="image" value="arrow"/>
-    <property name="spriteheight" value="127"/>
+    <property name="spriteheight" value="128"/>
     <property name="spritewidth" value="96"/>
    </properties>
   </object>
@@ -56,7 +56,7 @@
  <objectgroup color="#ff0000" name="EnemyEntities" width="34" height="34">
   <object name="EnemyEntity" x="544" y="240" width="512" height="576">
    <properties>
-    <property name="image" value="spinning_coin_gold"/>
+    <property name="image" value="car_run"/>
     <property name="spriteheight" value="64"/>
     <property name="spritewidth" value="32"/>
    </properties>

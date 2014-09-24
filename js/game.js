@@ -49,15 +49,15 @@ var game = {
 		me.pool.register("TrafficLightEntity", game.TrafficLightEntity);
 		me.pool.register("BusRoadEntity", game.BusRoadEntity);
 		me.pool.register("PassagerEntity", game.PassagerEntity);
-
+		me.pool.register("ArrowEntity", game.ArrowEntity, 99);
 		//me.pool.register("CoinEntity", game.CoinEntity);
-		//me.pool.register("EnemyEntity", game.EnemyEntity);
+		me.pool.register("EnemyEntity", game.EnemyEntity);
 
 		// enable the keyboard
-		me.input.bindKey(me.input.KEY.UP,		"up");
-		me.input.bindKey(me.input.KEY.LEFT,		"left");
-		me.input.bindKey(me.input.KEY.RIGHT,	"right");
-		me.input.bindKey(me.input.KEY.X,		"jump", true);
+		me.input.bindKey(me.input.KEY.UP, "up");
+		me.input.bindKey(me.input.KEY.LEFT,	"left");
+		me.input.bindKey(me.input.KEY.RIGHT, "right");
+		me.input.bindKey(me.input.KEY.DOWN, "down");
 
         // Start the game.
         me.state.change(me.state.MENU);
