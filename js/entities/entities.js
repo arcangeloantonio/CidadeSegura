@@ -48,7 +48,7 @@ game.PlayerEntity = me.Entity.extend(
 	}
 });
 
-
+/*
 game.EnemyEntity = me.Entity.extend(
 {	
 	init: function (x, y, settings)
@@ -134,7 +134,7 @@ game.EnemyEntity = me.Entity.extend(
 		return false;
 	}
 });
-
+*/
 game.TrafficLightEntity = me.Entity.extend(
 {
 	init:function (x, y, settings)
@@ -318,88 +318,135 @@ game.PassagerEntity = me.Entity.extend(
 	// }
 // });
 
-// /**
- // * Enemy Entity
- // */
-// game.EnemyEntity = me.Entity.extend(
-// {
-	// init: function (x, y, settings)
-	// {
-		// // define this here instead of tiled
-		// settings.image = "wheelie_right";
+/**
+ * Enemy Entity
+ */
+game.EnemyEntity = me.Entity.extend(
+{
+	init: function (x, y, settings)
+	{
+		var width = settings.width;
+		var height = settings.height;;
 
-        // // save the area size defined in Tiled
-		// var width = settings.width;
-		// var height = settings.height;;
+		settings.spritewidth = settings.width = 32;
+		settings.spritewidth = settings.height = 32;
 
-		// // adjust the size setting information to match the sprite size
-        // // so that the entity object is created with the right size
-		// settings.spritewidth = settings.width = 64;
-		// settings.spritewidth = settings.height = 64;
+		this._super(me.Entity, 'init', [x, y , settings]);
 
-		// // call the parent constructor
-		// this._super(me.Entity, 'init', [x, y , settings]);
+		x = this.pos.x;
+		this.startX = x;
+		this.endX   = x + width - settings.spritewidth
+		this.pos.x  = x + width - settings.spritewidth;
 
-		// // set start/end position based on the initial area size
-		// x = this.pos.x;
-		// this.startX = x;
-		// this.endX   = x + width - settings.spritewidth
-		// this.pos.x  = x + width - settings.spritewidth;
+		y = this.pos.y;
+		this.startY = y+4; //wtf?
+		this.endY   = y + height - settings.spriteheight;
+		this.pos.y  = y + height - settings.spriteheight;
 
-		// // manually update the entity bounds as we manually change the position
-		// this.updateBounds();
+		this.updateBounds();
 
-		// // to remember which side we were walking
-		// this.walkLeft = false;
+		this.walkHorizontal = true;
+		this.walkVertical = false;
+		
+		this.walkLeft = false;
+		this.walkDown = false;
+		this.body.setVelocity(4, 6);
+	},
+	update : function (dt)
+	{
+		console.log("Y", this.pos.y, this.startY, this.endY, "X", this.pos.x, this.startX, this.endY);
+		if (this.walkHorizontal) {
+			if ((this.pos.x <= this.startX))
+			{
+				if (this.pos.y >= this.startY) {
+					this.walkVertical = true;
+					this.walkHorizontal = false;
+					this.walkDown = true;
+				}
+				else if (this.pos.y <= this.startY) {
+					this.walkVertical = true;
+					this.walkHorizontal = false;
+					this.walkDown = false;
+				}
+				else {
+				this.walkLeft = false;
+				
+				this.walkVertical = false;
+				this.walkHorizontal = true;
+				}
+			}
+			else if (this.pos.x >= this.endX)
+			{
+				if (this.pos.y >= this.startY) {
+					this.walkVertical = true;
+					this.walkHorizontal = false;
+					this.walkDown = true;
+				}
+				else if (this.pos.y <= this.startY) {
+					this.walkVertical = true;
+					this.walkHorizontal = false;
+					this.walkDown = false;
+				}
+				else {
+					this.walkLeft = true;
+					this.walkVertical = false;
+					this.walkHorizontal = true;
+				}
+			}
+		}
+		else if (this.walkVertical) {
+			if ((this.pos.y <= this.startY))
+			{
+				if (this.pos.x >= this.startX) {
+					this.walkHorizontal = true;
+					this.walkVertical = false;
+					this.walkLeft = true;
+				}
+				else if (this.pos.x <= this.startX) {
+					this.walkHorizontal = true;
+					this.walkVertical = false;
+					this.walkLeft = false;
+				}
+				else {
+					this.walkLeft = false;
+					this.walkHorizontal = false;
+					this.walkVertical = true;
+				}
+			}
+			else if (this.pos.y >= this.endY)
+			{
+				if (this.pos.x >= this.startX) {
+					
+					this.walkHorizontal = true;
+					this.walkVertical = false;
+					this.walkLeft = true;
+				}
+				else if (this.pos.x <= this.startX) {
+					
+					this.walkHorizontal = true;
+					this.walkVertical = false;
+					this.walkLeft = false;
+				}
+				else {
+					
+					this.walkDown = true;
+					this.walkHorizontal = false;
+					this.walkVertical = true;
+				}
+			}
+		}
+		
+		if (this.walkHorizontal) this.body.vel.x += (this.walkLeft) ? -this.body.accel.x * me.timer.tick : this.body.accel.x * me.timer.tick;
+		if (this.walkVertical) this.body.vel.y += (this.walkDown) ? -this.body.accel.y * me.timer.tick : this.body.accel.y * me.timer.tick;
+		
+		
+		this.body.update(dt);
 
-		// // walking & jumping speed
-		// this.body.setVelocity(4, 6);
-	// },
-
-
-	// onCollision : function (res, obj)
-	// {
-
-		// // res.y >0 means touched by something on the bottom
-		// // which mean at top position for this one
-		// if (this.alive && (res.y > 0) && obj.falling)
-		// {
-			// this.renderable.flicker(750);
-		// }
-	// },
-
-
-	// // manage the enemy movement
-	// update : function (dt)
-	// {
-		// if (this.alive)
-		// {
-			// if (this.walkLeft && this.pos.x <= this.startX)
-			// {
-				// this.walkLeft = false;
-			// }
-			// else if (!this.walkLeft && this.pos.x >= this.endX)
-			// {
-				// this.walkLeft = true;
-			// }
-
-			// this.flipX(this.walkLeft);
-			// this.body.vel.x += (this.walkLeft) ? -this.body.accel.x * me.timer.tick : this.body.accel.x * me.timer.tick;
-
-		// }
-		// else
-		// {
-			// this.body.vel.x = 0;
-		// }
-		// // check & update movement
-		// this.body.update(dt);
-
-		// if (this.body.vel.x!=0 ||this.body.vel.y!=0)
-		// {
-			// // update the object animation
-			// this._super(me.Entity, 'update', [dt]);
-			// return true;
-		// }
-		// return false;
-	// }
-// });
+		if (this.body.vel.x!=0 ||this.body.vel.y!=0)
+		{
+			this._super(me.Entity, 'update', [dt]);
+			return true;
+		}
+		return false;
+	}
+});
