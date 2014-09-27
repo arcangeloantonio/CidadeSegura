@@ -89,6 +89,13 @@
     <property name="spritewidth" value="32"/>
    </properties>
   </object>
+  <object name="EnemyEntity" x="544" y="256" width="512" height="544">
+   <properties>
+    <property name="image" value="car_run"/>
+    <property name="spriteheight" value="64"/>
+    <property name="spritewidth" value="32"/>
+   </properties>
+  </object>
  </objectgroup>
  <layer name="collision" width="34" height="34">
   <data encoding="base64">

@@ -14,10 +14,10 @@ game.PlayerEntity = me.Entity.extend(
 		this.speed *= 0.99;
 		if (me.input.isKeyPressed('up') || me.input.isKeyPressed('down') || me.input.isKeyPressed('left') || me.input.isKeyPressed('right')) {
 			if (me.input.isKeyPressed("left")) {
-				this.angle -= 0.1;
+				this.angle -= 0.02 * this.speed;
 			}
 			if (me.input.isKeyPressed("right")) {
-				this.angle += 0.1;
+				this.angle += 0.02 * this.speed;
 			}
 			if (me.input.isKeyPressed("up")) {
 				this.speed += 0.05;
@@ -46,95 +46,14 @@ game.PlayerEntity = me.Entity.extend(
 		}
 		return false;
 	}
+	//,http://agmprojects.com/blog/rendering-shapes-and-drawings-via-the-canvas-in-melonjs
+	
+	// draw: function(context) {
+		// context.fillStyle = 'green';
+		// context.fillRect(20, 20, 20, 20);
+	// },
 });
 
-/*
-game.EnemyEntity = me.Entity.extend(
-{	
-	init: function (x, y, settings)
-	{
-		this._super(me.Entity, 'init', [x, y , settings]);
-		
-		this.auxX = true;
-		this.auxY = true;
-		
-		this.startY = y;
-		this.pos.y = y+10;
-		this.endY = (settings.y+settings.height) - settings.spriteheight;
-		this.stopY = false;		
-		
-		this.startX = x;
-		this.endX = (settings.x+settings.width) - settings.spritewidth;
-		this.stopX = true;
-		
-		this.body.setVelocity(4, 3);
-		
-		this.collidable = true;
-		this.type = me.game.ENEMY_OBJECT;	
-		this.alwaysUpdate = true
-	},
-	update : function (dt)
-	{
-		
-		if (!this.stopY && (this.pos.y >= this.endY || this.pos.y <= this.startY))
-		{
-			this.stopY = true;
-			this.auxX = true;
-		}
-		
-		if (!this.stopX && (this.pos.x >= this.endX || this.pos.x <= this.startX)) {
-			this.stopX = true;
-			this.auxY = true;
-		}
-		
-		if (this.stopX) {
-			if (this.stopY && this.auxX) {
-				this.vel.y = 0;
-				this.stopX = false;
-				this.auxX = false;
-			}
-			else {
-				if (this.pos.x < this.endX) {
-					this.body.vel.y += this.body.accel.y * me.timer.tick;
-					this.renderable.angle = 3.1;
-				}
-				if (this.pos.x > this.startX) {
-					this.body.vel.y -= this.body.accel.y * me.timer.tick;
-					this.renderable.angle = 0;
-				}
-			}
-		}
-		
-		if (this.stopY) {
-			if (this.stopX && this.auxY) {
-				this.vel.x = 0;
-				this.stopY = false;
-				this.auxY = false;
-			}
-			else {
-				if (this.pos.y > this.endY) {
-					this.vel.x += this.accel.x * me.timer.tick;
-					this.renderable.angle = 1.6;
-				}
-				if (this.pos.y < this.startY) {
-					this.vel.x -= this.accel.x * me.timer.tick;
-					this.renderable.angle = 4.7;
-				}
-			}
-		}
-		
-		
-		this.body.update(dt);
-			
-		if (this.body.vel.x!=0 ||this.body.vel.y!=0)
-		{
-			this._super(me.Entity, 'update', [dt]);
-			return true;
-		}
-		return false;
-	}
-});
-*/
 game.TrafficLightEntity = me.Entity.extend(
 {
 	init:function (x, y, settings)
@@ -178,7 +97,6 @@ game.BusRoadEntity = me.Entity.extend(
 	init:function (x, y, settings)
 	{
 		this._super(me.Entity, 'init', [x, y , settings]);
-		this.tempoInicial = me.timer.getTime();
 	},
 	update: function() {
 		me.collision.check(this, true, this.collideHandler.bind(this), true);
@@ -186,7 +104,7 @@ game.BusRoadEntity = me.Entity.extend(
 	collideHandler : function (response) {
 		if (response.b.name == 'mainplayer') {
 			this.tempoAtual = me.timer.getTime();
-			if (this.tempoAtual - this.tempoInicial >= 10000) {
+			if (this.tempoAtual >= 10000) {
 				this.tempoInicial = this.tempoAtual;
 				me.audio.play("cling");
 				game.data.score += 250;
@@ -195,9 +113,9 @@ game.BusRoadEntity = me.Entity.extend(
 	}
 });
 
-
-game.ArrowEntity = me.Entity.extend({
-init: function (x, y, settings)
+game.ArrowEntity = me.Entity.extend(
+{
+	init: function (x, y, settings)
 	{
 		this._super(me.Entity, 'init', [x, y , settings]);
 		
@@ -206,19 +124,19 @@ init: function (x, y, settings)
 		this.renderable.setCurrentAnimation("arrow", function(){self.renderable.setCurrentAnimation("point"); self.status = "OK";})
 	},
 	update: function() {			
-			var entidadeJogador = me.game.world.getChildByName("mainPlayer")[0];
-			var entidadePassageiro = me.game.world.getChildByName("passagerEntity")[0];
-			var angle = this.angleTo(entidadePassageiro) +  (90 * (Math.PI/180));
+		var entidadeJogador = me.game.world.getChildByName("mainPlayer")[0];
+		var entidadePassageiro = me.game.world.getChildByName("passagerEntity")[0];
+		var angle = this.angleTo(entidadePassageiro) +  (90 * (Math.PI/180));
+	
+		this.renderable.angle = angle;
+		this.pos.x = entidadeJogador.pos.x;
+		this.pos.y = entidadeJogador.pos.y;
+		this.body.pos.x = entidadeJogador.pos.x;
+		this.body.pos.y = entidadeJogador.pos.y;
 		
-			this.renderable.angle = angle;
-			this.pos.x = entidadeJogador.pos.x;
-            this.pos.y = entidadeJogador.pos.y;
-			this.body.pos.x = entidadeJogador.pos.x;
-			this.body.pos.y = entidadeJogador.pos.y;
-			
-			this.pos.sub({x: entidadeJogador.pos.x, y: entidadeJogador.pos.y});
-			this.updateBounds();
-			this.body.update();
+		this.pos.sub({x: entidadeJogador.pos.x, y: entidadeJogador.pos.y});
+		this.updateBounds();
+		//this.body.update();
 	}
 });
 
@@ -239,9 +157,6 @@ game.PassagerEntity = me.Entity.extend(
 
 		var self = this;
 		this.renderable.setCurrentAnimation("passager", function(){self.renderable.setCurrentAnimation("passager"); self.status = "OK";})
-
-		this.alwaysUpdate = true;
-		this.type = me.game.ENEMY_OBJECT;
 	},
 	update: function(dt) {
 		this.body.update();
@@ -289,38 +204,14 @@ game.PassagerEntity = me.Entity.extend(
 	}
 });
 
+game.PedestrianEntity  = me.Entity.extend(
+{
+	init: function (x, y, settings)
+	{
+		this._super(me.Entity, 'init', [x, y , settings]);
+	}
+});
 
-// /**
- // * Coin Entity
- // */
-// game.CoinEntity = me.CollectableEntity.extend(
-// {
-
-	// init: function (x, y, settings)
-	// {
-		// // call the parent constructor
-		// this._super(me.CollectableEntity, 'init', [x, y , settings]);
-
-        // // set our collision callback function
-        // this.body.onCollision = this.onCollision.bind(this);
-	// },
-
-	// onCollision : function ()
-	// {
-		// // do something when collide
-		// me.audio.play("cling");
-		// // give some score
-		// game.data.score += 250;
-		// // make sure it cannot be collected "again"
-		// this.body.setCollisionMask(me.collision.types.NO_OBJECT);
-		// // remove it
-		// me.game.world.removeChild(this);
-	// }
-// });
-
-/**
- * Enemy Entity
- */
 game.EnemyEntity = me.Entity.extend(
 {
 	init: function (x, y, settings)
@@ -339,107 +230,70 @@ game.EnemyEntity = me.Entity.extend(
 		this.pos.x  = x + width - settings.spritewidth;
 
 		y = this.pos.y;
-		this.startY = y+4; //wtf?
-		this.endY   = y + height - settings.spriteheight;
-		this.pos.y  = y + height - settings.spriteheight;
+		this.startY = y+6;
+		this.endY   = y + height - settings.spritewidth;
+		this.pos.y  = y + height - settings.spritewidth;
 
 		this.updateBounds();
 
-		this.walkHorizontal = true;
-		this.walkVertical = false;
+		this.auxX = true;
+		this.auxY = true;
 		
-		this.walkLeft = false;
-		this.walkDown = false;
-		this.body.setVelocity(4, 6);
+		this.stopX = true;
+		this.stopY = false;
+
+		this.alwaysUpdate = true;
+		this.body.setVelocity(4, 4);
 	},
 	update : function (dt)
 	{
-		console.log("Y", this.pos.y, this.startY, this.endY, "X", this.pos.x, this.startX, this.endY);
-		if (this.walkHorizontal) {
-			if ((this.pos.x <= this.startX))
-			{
-				if (this.pos.y >= this.startY) {
-					this.walkVertical = true;
-					this.walkHorizontal = false;
-					this.walkDown = true;
-				}
-				else if (this.pos.y <= this.startY) {
-					this.walkVertical = true;
-					this.walkHorizontal = false;
-					this.walkDown = false;
-				}
-				else {
-				this.walkLeft = false;
-				
-				this.walkVertical = false;
-				this.walkHorizontal = true;
-				}
-			}
-			else if (this.pos.x >= this.endX)
-			{
-				if (this.pos.y >= this.startY) {
-					this.walkVertical = true;
-					this.walkHorizontal = false;
-					this.walkDown = true;
-				}
-				else if (this.pos.y <= this.startY) {
-					this.walkVertical = true;
-					this.walkHorizontal = false;
-					this.walkDown = false;
-				}
-				else {
-					this.walkLeft = true;
-					this.walkVertical = false;
-					this.walkHorizontal = true;
-				}
-			}
+		if (!this.stopY && (this.pos.y >= this.endY || this.pos.y <= this.startY))
+		{
+			this.stopY = true;
+			this.auxX = true;
 		}
-		else if (this.walkVertical) {
-			if ((this.pos.y <= this.startY))
-			{
-				if (this.pos.x >= this.startX) {
-					this.walkHorizontal = true;
-					this.walkVertical = false;
-					this.walkLeft = true;
-				}
-				else if (this.pos.x <= this.startX) {
-					this.walkHorizontal = true;
-					this.walkVertical = false;
-					this.walkLeft = false;
-				}
-				else {
-					this.walkLeft = false;
-					this.walkHorizontal = false;
-					this.walkVertical = true;
-				}
+		
+		if (!this.stopX && (this.pos.x >= this.endX || this.pos.x <= this.startX)) {
+			this.stopX = true;
+			this.auxY = true;
+		}
+		
+		
+		if (this.stopX) {
+			if (this.stopY && this.auxX) {
+				this.body.vel.y = 0;
+				this.stopX = false;
+				this.auxX = false;
 			}
-			else if (this.pos.y >= this.endY)
-			{
-				if (this.pos.x >= this.startX) {
-					
-					this.walkHorizontal = true;
-					this.walkVertical = false;
-					this.walkLeft = true;
+			else {
+				if (this.pos.x < this.endX) {
+					this.body.vel.y += this.body.accel.y * me.timer.tick;
+					this.renderable.angle = 3.1;
 				}
-				else if (this.pos.x <= this.startX) {
-					
-					this.walkHorizontal = true;
-					this.walkVertical = false;
-					this.walkLeft = false;
-				}
-				else {
-					
-					this.walkDown = true;
-					this.walkHorizontal = false;
-					this.walkVertical = true;
+				if (this.pos.x > this.startX) {
+					this.body.vel.y -= this.body.accel.y * me.timer.tick;
+					this.renderable.angle = 0;
 				}
 			}
 		}
 		
-		if (this.walkHorizontal) this.body.vel.x += (this.walkLeft) ? -this.body.accel.x * me.timer.tick : this.body.accel.x * me.timer.tick;
-		if (this.walkVertical) this.body.vel.y += (this.walkDown) ? -this.body.accel.y * me.timer.tick : this.body.accel.y * me.timer.tick;
-		
-		
+		if (this.stopY) {
+			if (this.stopX && this.auxY) {
+				this.body.vel.x = 0;
+				this.stopY = false;
+				this.auxY = false;
+			}
+			else {
+				if (this.pos.y > this.endY) {
+					this.body.vel.x += this.body.accel.x * me.timer.tick;
+					this.renderable.angle = 1.6;
+				}
+				if (this.pos.y < this.startY) {
+					this.body.vel.x -= this.body.accel.x * me.timer.tick;
+					this.renderable.angle = 4.7;
+				}
+			}
+		}
 		this.body.update(dt);
 
 		if (this.body.vel.x!=0 ||this.body.vel.y!=0)
