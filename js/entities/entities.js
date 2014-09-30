@@ -359,7 +359,6 @@ game.PedestrianEntity  = me.Entity.extend(
 	collideHandler : function (response) {
 		
 		if (response.b.name == 'pedestrianlightentity') {
-			console.log(response.overlapN.y == 1 && response.overlapN.x == 0);
 			if (response.b.renderable.isCurrentAnimation("red") && response.overlapN.y == 1 && response.overlapN.x == 0) {
 				response.a.body.vel.y = 0;
 				response.a.body.vel.x = 0;
@@ -404,6 +403,7 @@ game.EnemyEntity = me.Entity.extend(
 
 		this.alwaysUpdate = true;
 		this.body.setVelocity(4, 4);
+		this.teste = true;
 	},
 	update : function (dt)
 	{
@@ -454,13 +454,28 @@ game.EnemyEntity = me.Entity.extend(
 				}
 			}
 		}
-		this.body.update(dt);
-
+		
+		me.collision.check(this, true, this.collideHandler.bind(this), true);
+		
+		if (this.teste) {
+			this.body.update(dt);
+		}
+		
 		if (this.body.vel.x!=0 ||this.body.vel.y!=0)
 		{
 			this._super(me.Entity, 'update', [dt]);
 			return true;
 		}
 		return false;
+	},
+	collideHandler: function(response) {
+		if (response.b.name == 'trafficlightentity') {
+			if (response.b.renderable.isCurrentAnimation("red") && response.overlapN.y == 1 && response.overlapN.x == 0) {
+				this.teste = false;
+			}
+			else {
+				this.teste = true;
+			}
+		}
 	}
 });
