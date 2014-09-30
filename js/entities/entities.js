@@ -1,3 +1,17 @@
+game.Rect = me.Renderable.extend({
+	// init : function (x, y, w, h, color) {
+		// this._super(me.Renderable, "init", [x, y, w, h]);
+		// this.z = 0;
+		// this.color = color;
+	// },
+	// draw : function(context) {
+	// console.log(me.loader.getImage("car_run"));;
+		// var cerebro = me.loader.getImage("car_run"); 
+		// context.drawImage(cerebro, 50, 50);
+		// context.fillRect(100, 100, 50, 50, 'red');
+	// }
+});
+
 game.PlayerEntity = me.Entity.extend(
 {
 	init:function (x, y, settings)
@@ -8,6 +22,9 @@ game.PlayerEntity = me.Entity.extend(
 		this.speed = 0;
 		me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
 		this.alwaysUpdate = true;
+		
+		//this.renderable = new me.Container(100, 100, 100, 100);
+		//this.renderable.addChild(new game.Rect(100, 100,100,100));
 	},
 	update : function (dt)
 	{
@@ -46,13 +63,21 @@ game.PlayerEntity = me.Entity.extend(
 		}
 		return false;
 	}
-	//,http://agmprojects.com/blog/rendering-shapes-and-drawings-via-the-canvas-in-melonjs
-	
-	// draw: function(context) {
-		// context.fillStyle = 'green';
-		// context.fillRect(20, 20, 20, 20);
-	// },
 });
+
+// game.TesteEntity = me.Entity.extend(
+// {
+	// init:function (x, y, settings)
+	// {
+	// },
+	// update : function (dt)
+	// {
+	// },
+	// draw: function(context) {
+		// var cerebro = me.loader.getImage("teste"); 
+		// context.drawImage(cerebro, 50, 50);
+	// }
+// });
 
 game.TrafficLightEntity = me.Entity.extend(
 {
@@ -72,7 +97,7 @@ game.TrafficLightEntity = me.Entity.extend(
 	update : function ()
 	{
 		this.tempoAtual = me.timer.getTime();
-		if (this.tempoAtual - this.tempoInicial >= 750) {
+		if (this.tempoAtual - this.tempoInicial >= 1000) {
 			this.tempoInicial = this.tempoAtual;
 			if (this.renderable.isCurrentAnimation("green")) {
 				this.renderable.setCurrentAnimation("red", function(){this.renderable.setCurrentAnimation("red"); this.status = "OK";});
@@ -91,6 +116,37 @@ game.TrafficLightEntity = me.Entity.extend(
 			}
 	}
 });
+
+game.PedestrianLightEntity = me.Entity.extend(
+{
+	init:function (x, y, settings)
+	{
+		this._super(me.Entity, 'init', [x, y , settings]);
+        this.renderable.addAnimation("red", [0]);
+		this.renderable.addAnimation("green", [1]);
+
+		var self = this;
+		this.renderable.setCurrentAnimation("red", function(){self.renderable.setCurrentAnimation("red"); self.status = "OK";})
+
+	},
+	update : function ()
+	{
+		me.collision.check(this, true, this.collideHandler.bind(this), true);
+	},
+	collideHandler : function (response) {
+		if (response.b.name == 'trafficlightentity') {
+			var trafficlight = response.b;
+			if (response.b.renderable.isCurrentAnimation("green")) {
+					response.a.renderable.setCurrentAnimation("red", function(){this.renderable.setCurrentAnimation("red"); this.status = "OK";});
+				}
+			else {
+				response.a.renderable.setCurrentAnimation("green", function(){this.renderable.setCurrentAnimation("green"); this.status = "OK";});
+			}
+		}
+	}
+});
+
+
 
 game.BusRoadEntity = me.Entity.extend(
 {
@@ -135,8 +191,9 @@ game.ArrowEntity = me.Entity.extend(
 		this.body.pos.y = entidadeJogador.pos.y;
 		
 		this.pos.sub({x: entidadeJogador.pos.x, y: entidadeJogador.pos.y});
+		
 		this.updateBounds();
-		//this.body.update();
+		this.body.update();
 	}
 });
 
@@ -208,8 +265,111 @@ game.PedestrianEntity  = me.Entity.extend(
 {
 	init: function (x, y, settings)
 	{
+		var width = settings.width;
+		var height = settings.height;;
+
+		settings.spritewidth = settings.width = 32;
+		settings.height = settings.height = 32;
+
 		this._super(me.Entity, 'init', [x, y , settings]);
-	}
+
+		x = this.pos.x;
+		this.startX = x;
+		this.endX   = x + width - settings.spritewidth
+		this.pos.x  = x + width - settings.spritewidth;
+
+		y = this.pos.y;
+		this.startY = y;
+		this.endY   = y + height - settings.spritewidth;
+		this.pos.y  = y + height - settings.spritewidth;
+
+		this.updateBounds();
+
+		this.auxX = true;
+		this.auxY = true;
+		
+		this.stopX = true;
+		this.stopY = false;
+
+		this.alwaysUpdate = true;
+		this.body.setVelocity(4, 4);
+		
+		this.renderable.addAnimation("passager", [0]);
+		this.renderable.addAnimation("point", [1]);
+
+		var self = this;
+		this.renderable.setCurrentAnimation("passager", function(){self.renderable.setCurrentAnimation("passager"); self.status = "OK";})
+	},
+	update: function(dt)
+	{
+		if (!this.stopY && (this.pos.y >= this.endY || this.pos.y <= this.startY))
+		{
+			this.stopY = true;
+			this.auxX = true;
+		}
+		
+		if (!this.stopX && (this.pos.x >= this.endX || this.pos.x <= this.startX)) {
+			this.stopX = true;
+			this.auxY = true;
+		}
+		
+		
+		if (this.stopX) {
+			if (this.stopY && this.auxX) {
+				this.body.vel.y = 0;
+				this.stopX = false;
+				this.auxX = false;
+			}
+			else {
+				if (this.pos.x < this.endX) {
+					this.body.vel.y += this.body.accel.y * me.timer.tick;
+				}
+				if (this.pos.x > this.startX) {
+					this.body.vel.y -= this.body.accel.y * me.timer.tick;
+				}
+			}
+		}
+		
+		if (this.stopY) {
+			if (this.stopX && this.auxY) {
+				this.body.vel.x = 0;
+				this.stopY = false;
+				this.auxY = false;
+			}
+			else {
+				if (this.pos.y > this.endY) {
+					this.body.vel.x += this.body.accel.x * me.timer.tick;					
+				}
+				if (this.pos.y < this.startY) {
+					this.body.vel.x -= this.body.accel.x * me.timer.tick;
+				}
+			}
+		}
+		me.collision.check(this, true, this.collideHandler.bind(this), true);
+	
+		this.body.update(dt);
+
+		if (this.body.vel.x!=0 ||this.body.vel.y!=0)
+		{
+			this._super(me.Entity, 'update', [dt]);
+			return true;
+		}
+		return false;
+	},
+	collideHandler : function (response) {
+		
+		if (response.b.name == 'pedestrianlightentity') {
+			console.log(response.overlapN.y == 1 && response.overlapN.x == 0);
+			if (response.b.renderable.isCurrentAnimation("red") && response.overlapN.y == 1 && response.overlapN.x == 0) {
+				response.a.body.vel.y = 0;
+				response.a.body.vel.x = 0;
+			}
+			else {
+				if (this.stopX) response.a.body.vel.y = 2;
+				if (this.stopY) response.a.body.vel.x = 2;
+			}
+		}
+	},
 });
 
 game.EnemyEntity = me.Entity.extend(

@@ -23,13 +23,14 @@ var game = {
         me.state.set(me.state.MENU, new game.TitleScreen());
         me.state.set(me.state.PLAY, new game.PlayScreen());
 
-		me.pool.register("mainPlayer", game.PlayerEntity);
+		me.pool.register("mainPlayer", game.PlayerEntity, 99);
 		me.pool.register("TrafficLightEntity", game.TrafficLightEntity);
 		me.pool.register("BusRoadEntity", game.BusRoadEntity);
 		me.pool.register("PassagerEntity", game.PassagerEntity);
 		me.pool.register("ArrowEntity", game.ArrowEntity, 99);
 		me.pool.register("PedestrianEntity", game.PedestrianEntity);
 		me.pool.register("EnemyEntity", game.EnemyEntity);
+		me.pool.register("PedestrianLightEntity", game.PedestrianLightEntity);
 
 		me.input.bindKey(me.input.KEY.UP, "up");
 		me.input.bindKey(me.input.KEY.LEFT,	"left");

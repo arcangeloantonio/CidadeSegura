@@ -28,6 +28,7 @@ game.resources = [
 	{name: "spinning_coin_gold",  type:"image", src: "data/img/sprite/spinning_coin_gold.png"},
 	{name: "transparente",  type:"image", src: "data/img/sprite/transparente.png"},
 	{name: "lights",  type:"image", src: "data/img/sprite/lights.png"},
+	{name: "pedestrian_lights",  type:"image", src: "data/img/sprite/pedestrian_lights.png"},
 	{name: "arrow",  type:"image", src: "data/img/sprite/arrow.png"},
 	{name: "passager",  type:"image", src: "data/img/sprite/passager.png"},
 	
