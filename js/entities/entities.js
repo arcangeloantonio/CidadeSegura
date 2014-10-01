@@ -45,7 +45,7 @@ game.PlayerEntity = me.Entity.extend(
 	},
 	update : function (dt)
 	{
-	
+		this.z = 99;
 		this.speed *= 0.99;
 		if (me.input.isKeyPressed('up') || me.input.isKeyPressed('down') || me.input.isKeyPressed('left') || me.input.isKeyPressed('right')) {
 			if (me.input.isKeyPressed("left")) {
@@ -95,7 +95,7 @@ game.TrafficLightEntity = me.Entity.extend(
 
 		var self = this;
 		this.renderable.setCurrentAnimation("red", function(){self.renderable.setCurrentAnimation("red"); self.status = "OK";})
-
+		this.alwaysUpdate = true;
 	},
 	update : function ()
 	{
@@ -130,7 +130,7 @@ game.PedestrianLightEntity = me.Entity.extend(
 
 		var self = this;
 		this.renderable.setCurrentAnimation("red", function(){self.renderable.setCurrentAnimation("red"); self.status = "OK";})
-
+		this.alwaysUpdate = true;
 	},
 	update : function ()
 	{
@@ -154,17 +154,19 @@ game.BusRoadEntity = me.Entity.extend(
 	init:function (x, y, settings)
 	{
 		this._super(me.Entity, 'init', [x, y , settings]);
+		this.alwaysUpdate = true;
+		this.tempo = 0;
 	},
 	update: function() {
 		me.collision.check(this, true, this.collideHandler.bind(this), true);
 	},
 	collideHandler : function (response) {
 		if (response.b.name == 'mainplayer') {
-			this.tempoAtual = me.timer.getTime();
-			if (this.tempoAtual >= 10000) {
-				this.tempoInicial = this.tempoAtual;
+			if (this.tempo == 0) this.tempo = me.timer.getTime()+10000;
+			if (me.timer.getTime() >= this.tempo) {
 				me.audio.play("cling");
 				game.data.score += 250;
+				this.tempo = 0;
 			}
 		}
 	}
@@ -265,13 +267,17 @@ game.PedestrianEntity  = me.Entity.extend(
 		this.stopY = false;
 
 		this.alwaysUpdate = true;
-		this.body.setVelocity(4, 4);
+		this.body.setVelocity(2,2);
 		
-		this.renderable.addAnimation("passager", [0]);
-		this.renderable.addAnimation("point", [1]);
+		this.renderable.addAnimation("left", [0]);
+		this.renderable.addAnimation("right", [1]);
 
 		var self = this;
-		this.renderable.setCurrentAnimation("passager", function(){self.renderable.setCurrentAnimation("passager"); self.status = "OK";})
+		this.renderable.setCurrentAnimation("left", function(){self.renderable.setCurrentAnimation("left"); self.status = "OK";})
+		
+		this.pixelsAndados = 0;
+		this.parado = false;
+		
 	},
 	update: function(dt)
 	{
@@ -292,14 +298,18 @@ game.PedestrianEntity  = me.Entity.extend(
 				this.body.vel.y = 0;
 				this.stopX = false;
 				this.auxX = false;
+				this.pixelsAndados = 0;
 			}
 			else {
 				if (this.pos.x < this.endX) {
 					this.body.vel.y += this.body.accel.y * me.timer.tick;
+					this.renderable.angle = (180 * (Math.PI/180));
 				}
 				if (this.pos.x > this.startX) {
 					this.body.vel.y -= this.body.accel.y * me.timer.tick;
+					this.renderable.angle = (360 * (Math.PI/180));
 				}
+				this.pixelsAndados += this.body.accel.y;
 			}
 		}
 		
@@ -308,18 +318,34 @@ game.PedestrianEntity  = me.Entity.extend(
 				this.body.vel.x = 0;
 				this.stopY = false;
 				this.auxY = false;
+				this.pixelsAndados = 0;
 			}
 			else {
-				if (this.pos.y > this.endY) {
-					this.body.vel.x += this.body.accel.x * me.timer.tick;					
-				}
+				this.renderable.angle = (90 * (Math.PI/180)); //Gambiarra para funcionar
+				// if (this.pos.y > this.endY) {
+					// this.body.vel.x += this.body.accel.x * me.timer.tick;
+					
+				// }
 				if (this.pos.y < this.startY) {
 					this.body.vel.x -= this.body.accel.x * me.timer.tick;
+					this.renderable.angle = (270 * (Math.PI/180));					
 				}
+				this.pixelsAndados += this.body.accel.x;
 			}
-		}
+		}		
 		me.collision.check(this, true, this.collideHandler.bind(this), true);
-	
+		
+		var self = this;
+		if (this.pixelsAndados >= 32 && !this.parado) {
+			if (this.renderable.isCurrentAnimation("left")) {
+				this.renderable.setCurrentAnimation("right", function(){self.renderable.setCurrentAnimation("left"); self.status = "OK";})
+			}
+			else {
+				this.renderable.setCurrentAnimation("left", function(){self.renderable.setCurrentAnimation("left"); self.status = "OK";})
+			}
+			this.pixelsAndados = 0;
+		}
+		
 		this.body.update(dt);
 
 		if (this.body.vel.x!=0 ||this.body.vel.y!=0)
@@ -335,10 +361,12 @@ game.PedestrianEntity  = me.Entity.extend(
 			if (response.b.renderable.isCurrentAnimation("red") && response.overlapN.y == 1 && response.overlapN.x == 0) {
 				response.a.body.vel.y = 0;
 				response.a.body.vel.x = 0;
+				this.parado = true;
 			}
 			else {
 				if (this.stopX) response.a.body.vel.y = 2;
 				if (this.stopY) response.a.body.vel.x = 2;
+				this.parado = false;
 			}
 		}
 	},
@@ -376,7 +404,7 @@ game.EnemyEntity = me.Entity.extend(
 
 		this.alwaysUpdate = true;
 		this.body.setVelocity(4, 4);
-		this.teste = true;
+		this.parado = false;
 	},
 	update : function (dt)
 	{
@@ -430,7 +458,7 @@ game.EnemyEntity = me.Entity.extend(
 		
 		me.collision.check(this, true, this.collideHandler.bind(this), true);
 		
-		if (this.teste) {
+		if (!this.parado) {
 			this.body.update(dt);
 		}
 		
@@ -444,10 +472,10 @@ game.EnemyEntity = me.Entity.extend(
 	collideHandler: function(response) {
 		if (response.b.name == 'trafficlightentity') {
 			if (response.b.renderable.isCurrentAnimation("red") && response.overlapN.y == 1 && response.overlapN.x == 0) {
-				this.teste = false;
+				this.parado = true;
 			}
 			else {
-				this.teste = true;
+				this.parado = false;
 			}
 		}
 	}

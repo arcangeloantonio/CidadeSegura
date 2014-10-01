@@ -25,7 +25,7 @@ var game = {
 		me.state.set(me.state.CREDITS, new game.CreditScreen());
         me.state.set(me.state.PLAY, new game.PlayScreen());
 
-		me.pool.register("mainPlayer", game.PlayerEntity);
+		me.pool.register("mainPlayer", game.PlayerEntity, 99);
 		me.pool.register("TrafficLightEntity", game.TrafficLightEntity);
 		me.pool.register("BusRoadEntity", game.BusRoadEntity);
 		me.pool.register("PassagerEntity", game.PassagerEntity);

@@ -32,6 +32,9 @@ game.resources = [
 	{name: "pedestrian_lights",  type:"image", src: "data/img/sprite/pedestrian_lights.png"},
 	{name: "arrow",  type:"image", src: "data/img/sprite/arrow.png"},
 	{name: "passager",  type:"image", src: "data/img/sprite/passager.png"},
+	{name: "pedestrian",     type:"image",	src: "data/img/sprite/pedestrian.png"},
+	{name: "faixa_onibus_vertical",     type:"image",	src: "data/img/sprite/faixa_onibus_vertical.png"},
+	{name: "faixa_onibus_horizontal",     type:"image",	src: "data/img/sprite/faixa_onibus_horizontal.png"},
 	
 	//Tiles
 	{name: "tiles", type:"image", src: "data/img/map/tiles.png"},
