@@ -17,11 +17,11 @@ game.TitleScreen = me.ScreenObject.extend({
             },
             draw : function (ctx) {
 				var context = ctx.getContext();
-				this.desenharFonteCentro(context, "Cidade Segura", 50, 100, "red");
-				this.desenharFonteCentro(context, "Jogar", 200, 50, game.data.posicaoMenu == 1 ? "red" : "white");
-				this.desenharFonteCentro(context, "Opcoes", 300, 50, game.data.posicaoMenu == 2 ? "red" : "white");
-				this.desenharFonteCentro(context, "Ajuda", 400, 50, game.data.posicaoMenu == 3 ? "red" : "white");
-				this.desenharFonteCentro(context, "Creditos", 500, 50, game.data.posicaoMenu == 4 ? "red" : "white");
+				this.desenharFonteCentro(context, "Cidade Segura", 30, 100, "black");
+				this.desenharFonteCentro(context, "Jogar", 220, 50, game.data.posicaoMenu == 1 ? "red" : "black");
+				this.desenharFonteCentro(context, "Opções", 320, 50, game.data.posicaoMenu == 2 ? "red" : "black");
+				this.desenharFonteCentro(context, "Ajuda", 420, 50, game.data.posicaoMenu == 3 ? "red" : "black");
+				this.desenharFonteCentro(context, "Créditos", 520, 50, game.data.posicaoMenu == 4 ? "red" : "black");
             },			
 			desenharFonteCentro: function(contexto, texto, y, tamanhoFonte, cor) {					
 				this.text = texto;

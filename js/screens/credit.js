@@ -9,10 +9,12 @@ game.CreditScreen = me.ScreenObject.extend({
             },
             draw : function (ctx) {
 				var context = ctx.getContext();
-				
+				context.clearRect(100,200,600,175);
 				context.beginPath();
+				
 				context.rect(100, 200, 600 , 175);
-				context.fillStyle = 'black';
+				context.fillStyle = 'rgba(0,0,0,0.5)';;
+				context.globalAlpha=0.2;
 				context.fill();
 				context.lineWidth = 7;
 				context.strokeStyle = 'red';
