@@ -22,9 +22,6 @@ game.PlayerEntity = me.Entity.extend(
 		this.speed = 0;
 		me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
 		this.alwaysUpdate = true;
-		
-		//this.renderable = new me.Container(100, 100, 100, 100);
-		//this.renderable.addChild(new game.Rect(100, 100,100,100));
 	},
 	update : function (dt)
 	{

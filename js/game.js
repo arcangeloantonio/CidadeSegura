@@ -1,6 +1,7 @@
 var game = {
 	data : {
-		score : 0
+		score : 0,
+		posicaoMenu: 1
 	},
     "onload" : function () {
         if (!me.video.init("screen", me.video.CANVAS, 800, 600, true, 'auto')) {
@@ -21,6 +22,7 @@ var game = {
     },
     "loaded" : function () {
         me.state.set(me.state.MENU, new game.TitleScreen());
+		me.state.set(me.state.CREDITS, new game.CreditScreen());
         me.state.set(me.state.PLAY, new game.PlayScreen());
 
 		me.pool.register("mainPlayer", game.PlayerEntity, 99);

@@ -23,7 +23,7 @@ game.resources = [
 	{name: "metatiles32x32",  	  type:"image", src: "data/img/map/metatiles32x32.png"},
 	
 	
-		//Sprites
+	//Sprites
 	{name: "car_run", type:"image", src: "data/img/sprite/car_run.png"},
 	{name: "spinning_coin_gold",  type:"image", src: "data/img/sprite/spinning_coin_gold.png"},
 	{name: "transparente",  type:"image", src: "data/img/sprite/transparente.png"},
