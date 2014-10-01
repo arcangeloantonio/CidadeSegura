@@ -1,21 +1,10 @@
-game.Rect = me.Renderable.extend({
-	// init : function (x, y, w, h, color) {
-		// this._super(me.Renderable, "init", [x, y, w, h]);
-		// this.z = 0;
-		// this.color = color;
-	// },
-	// draw : function(context) {
-	// console.log(me.loader.getImage("car_run"));;
-		// var cerebro = me.loader.getImage("car_run"); 
-		// context.drawImage(cerebro, 50, 50);
-		// context.fillRect(100, 100, 50, 50, 'red');
-	// }
-});
-
 game.PlayerEntity = me.Entity.extend(
 {
 	init:function (x, y, settings)
 	{
+		settings.width = 32;
+		settings.height = 32;
+		
 		this.angle = 0;
 		this._super(me.Entity, 'init', [x, y , settings]);
 		this.body.setVelocity(3, 3);
@@ -23,8 +12,40 @@ game.PlayerEntity = me.Entity.extend(
 		me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
 		this.alwaysUpdate = true;
 	},
+	draw: function(ctx) {
+		var context = ctx.getContext();
+		var carro = me.loader.getImage("car"); 
+		
+		var raio = 48;
+		
+		context.save();
+		context.translate(this.pos.x+16, this.pos.y+16);
+		context.rotate(this.angle);
+		context.drawImage(carro,-carro.width/2,-carro.width/2);
+		context.restore();
+		
+		// context.beginPath();
+		// context.arc(this.pos.x+16, this.pos.y+32, raio, 0, Math.PI * 2);
+		// context.closePath();
+		// context.stroke();
+		
+		var seta = me.loader.getImage("arrow"); 
+		
+		var entidadePassageiro = me.game.world.getChildByName("passagerEntity")[0];
+		var anguloPassageiro = this.angleTo(entidadePassageiro) +  (90 * (Math.PI/180));
+		
+		context.save();
+		context.translate((this.pos.x+16) + raio * 0.9 * Math.cos(anguloPassageiro), (this.pos.y+32) + raio * 0.9 * Math.sin(anguloPassageiro));
+		
+		context.rotate(anguloPassageiro);
+		context.drawImage(seta, -seta.width*0.75, -seta.height * 0.5);
+		
+		context.setTransform(1,0,0,1,0,0);
+		context.restore();		
+	},
 	update : function (dt)
 	{
+	
 		this.speed *= 0.99;
 		if (me.input.isKeyPressed('up') || me.input.isKeyPressed('down') || me.input.isKeyPressed('left') || me.input.isKeyPressed('right')) {
 			if (me.input.isKeyPressed("left")) {
@@ -48,10 +69,9 @@ game.PlayerEntity = me.Entity.extend(
 			this.body.vel.x *= 0.95;
 			this.body.vel.y *= 0.95;
 		}
-		this.body.update(dt);
-
+		
 		this.renderable.angle = this.angle;
-
+		this.body.update(dt);
 
 		 if (this.body.vel.x!=0 || this.body.vel.y!=0)
 		 {
@@ -61,20 +81,6 @@ game.PlayerEntity = me.Entity.extend(
 		return false;
 	}
 });
-
-// game.TesteEntity = me.Entity.extend(
-// {
-	// init:function (x, y, settings)
-	// {
-	// },
-	// update : function (dt)
-	// {
-	// },
-	// draw: function(context) {
-		// var cerebro = me.loader.getImage("teste"); 
-		// context.drawImage(cerebro, 50, 50);
-	// }
-// });
 
 game.TrafficLightEntity = me.Entity.extend(
 {
@@ -143,8 +149,6 @@ game.PedestrianLightEntity = me.Entity.extend(
 	}
 });
 
-
-
 game.BusRoadEntity = me.Entity.extend(
 {
 	init:function (x, y, settings)
@@ -163,34 +167,6 @@ game.BusRoadEntity = me.Entity.extend(
 				game.data.score += 250;
 			}
 		}
-	}
-});
-
-game.ArrowEntity = me.Entity.extend(
-{
-	init: function (x, y, settings)
-	{
-		this._super(me.Entity, 'init', [x, y , settings]);
-		
-		var self = this;
-		this.renderable.addAnimation("arrow", [0]);
-		this.renderable.setCurrentAnimation("arrow", function(){self.renderable.setCurrentAnimation("point"); self.status = "OK";})
-	},
-	update: function() {			
-		var entidadeJogador = me.game.world.getChildByName("mainPlayer")[0];
-		var entidadePassageiro = me.game.world.getChildByName("passagerEntity")[0];
-		var angle = this.angleTo(entidadePassageiro) +  (90 * (Math.PI/180));
-	
-		this.renderable.angle = angle;
-		this.pos.x = entidadeJogador.pos.x;
-		this.pos.y = entidadeJogador.pos.y;
-		this.body.pos.x = entidadeJogador.pos.x;
-		this.body.pos.y = entidadeJogador.pos.y;
-		
-		this.pos.sub({x: entidadeJogador.pos.x, y: entidadeJogador.pos.y});
-		
-		this.updateBounds();
-		this.body.update();
 	}
 });
 

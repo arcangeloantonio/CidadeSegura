@@ -4,6 +4,7 @@ game.resources = [
 	 */
 	// the main player spritesheet
 	{name: "car_run",     type:"image",	src: "data/img/sprite/car_run.png"},
+	{name: "car",     type:"image",	src: "data/img/sprite/car.png"},
 	
 	{name: "gripe_run_right",     type:"image",	src: "data/img/sprite/gripe_run_right.png"},
 	// the spinning coin spritesheet
