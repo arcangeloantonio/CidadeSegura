@@ -3,7 +3,7 @@ game.PlayerEntity = me.Entity.extend(
 	init:function (x, y, settings)
 	{
 		settings.width = 32;
-		settings.height = 32;
+		settings.height = 48;
 		
 		this.angle = 0;
 		this._super(me.Entity, 'init', [x, y , settings]);
@@ -476,6 +476,30 @@ game.EnemyEntity = me.Entity.extend(
 			}
 			else {
 				this.parado = false;
+			}
+		}
+	}
+});
+
+
+game.StopEntity = me.Entity.extend(
+{
+	init:function (x, y, settings)
+	{
+		this._super(me.Entity, 'init', [x, y , settings]);
+		this.alwaysUpdate = true;
+		this.tempo = 0;
+	},
+	update: function() {
+		me.collision.check(this, true, this.collideHandler.bind(this), true);
+	},
+	collideHandler : function (response) {
+		if (response.b.name == 'mainplayer') {
+			if (this.tempo == 0) this.tempo = me.timer.getTime()+4000;
+			if (me.timer.getTime() >= this.tempo) {
+				me.audio.play("cling");
+				game.data.score += 250;
+				this.tempo = 0;
 			}
 		}
 	}

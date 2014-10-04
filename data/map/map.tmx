@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="34" height="34" tilewidth="32" tileheight="32">
- <tileset firstgid="1" name="metatiles32x32" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="Meta" tilewidth="32" tileheight="32">
   <image source="../img/map/metatiles32x32.png" width="160" height="32"/>
   <tile id="0">
    <properties>
@@ -13,7 +13,7 @@
    </properties>
   </tile>
  </tileset>
- <tileset firstgid="6" name="road_tiles" tilewidth="32" tileheight="32">
+ <tileset firstgid="6" name="Ruas" tilewidth="32" tileheight="32">
   <image source="../img/map/tiles.png" width="192" height="160"/>
   <tile id="0">
    <properties>
@@ -24,7 +24,7 @@
  <tileset firstgid="36" name="sidewalk" tilewidth="32" tileheight="32">
   <image source="../img/map/sidewalk.png" width="192" height="64"/>
  </tileset>
- <tileset firstgid="48" name="placas" tilewidth="32" tileheight="32">
+ <tileset firstgid="48" name="Placas" tilewidth="32" tileheight="32">
   <image source="../img/map/placas.png" width="160" height="32"/>
  </tileset>
  <layer name="background" width="34" height="34">
@@ -40,7 +40,7 @@
  <objectgroup color="#00ff00" name="Entities" width="34" height="34">
   <object name="mainPlayer" x="159" y="194" width="32" height="64">
    <properties>
-    <property name="image" value="car_run"/>
+    <property name="image" value="car"/>
     <property name="spriteheight" value="64"/>
     <property name="spritewidth" value="32"/>
    </properties>
@@ -49,7 +49,7 @@
  <objectgroup color="#ff0000" name="EnemyEntities" width="34" height="34">
   <object name="EnemyEntity" x="256" y="32" width="256" height="416">
    <properties>
-    <property name="image" value="car_run"/>
+    <property name="image" value="car"/>
     <property name="spriteheight" value="64"/>
     <property name="spritewidth" value="32"/>
    </properties>
@@ -84,7 +84,7 @@
   </object>
   <object name="EnemyEntity" x="544" y="256" width="512" height="544">
    <properties>
-    <property name="image" value="car_run"/>
+    <property name="image" value="car"/>
     <property name="spriteheight" value="64"/>
     <property name="spritewidth" value="32"/>
    </properties>
@@ -101,6 +101,13 @@
     <property name="image" value="faixa_onibus_horizontal"/>
     <property name="spriteheight" value="32"/>
     <property name="spritewidth" value="320"/>
+   </properties>
+  </object>
+  <object name="StopEntity" x="128" y="480" width="32" height="32">
+   <properties>
+    <property name="image" value="stop"/>
+    <property name="spriteheight" value="32"/>
+    <property name="spritewidth" value="32"/>
    </properties>
   </object>
  </objectgroup>
