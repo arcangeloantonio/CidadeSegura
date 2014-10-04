@@ -1,3 +1,9 @@
+//TODO
+// HUD Pontuação/Dinheiro/Tempo/Caixa de Diálogo
+// Entidade Proibido estacionar
+// Pausa
+// Resto dos menus
+
 game.PlayerEntity = me.Entity.extend(
 {
 	init:function (x, y, settings)
