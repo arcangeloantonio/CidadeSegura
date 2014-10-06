@@ -3,6 +3,8 @@
 // Entidade Proibido estacionar
 // Pausa
 // Resto dos menus
+// Sons
+// Sprite carro
 
 game.PlayerEntity = me.Entity.extend(
 {
@@ -61,6 +63,7 @@ game.PlayerEntity = me.Entity.extend(
 				this.angle += 0.02 * this.speed;
 			}
 			if (me.input.isKeyPressed("up")) {
+				
 				this.speed += 0.05;
 				this.body.vel.x = Math.sin(this.angle) * this.speed * me.timer.tick;
 				this.body.vel.y = -Math.cos(this.angle) * this.speed * me.timer.tick;
@@ -164,6 +167,7 @@ game.BusRoadEntity = me.Entity.extend(
 		this.tempo = 0;
 	},
 	update: function() {
+		this.z = 7;
 		me.collision.check(this, true, this.collideHandler.bind(this), true);
 	},
 	collideHandler : function (response) {

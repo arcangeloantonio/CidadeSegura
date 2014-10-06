@@ -9,6 +9,8 @@ game.HUD.Container = me.Container.extend({
 		
 		this.addChild(new game.HUD.ScoreItem(790, 560));
 		this.addChild(new game.HUD.Velocity(250, 560));
+		this.addChild(new game.HUD.Money(500,500));
+		this.addChild(new game.HUD.Time(500,300));
 	}
 });
 
@@ -51,5 +53,43 @@ game.HUD.Velocity = me.Renderable.extend( {
 	},
 	draw : function (context) {
 		this.font.draw (context, this.velocidade, this.pos.x, this.pos.y);
+	}
+});
+
+game.HUD.Money = me.Renderable.extend( {	
+	init: function(x, y) {
+		this._super(me.Renderable, 'init', [x, y, 10, 10]); 
+		this.money = 1000;
+		this.floating = true;
+	},
+	update : function () {
+		return true;
+	},
+	draw : function (ctx) {
+		var context = ctx.getContext();
+		this.font = new me.Font("Burnstown", 50, '#000000');
+		this.font.bold();
+		this.font.draw(context, 'R$: ' + this.money, this.pos.x, this.pos.y);
+	}
+});
+
+game.HUD.Time = me.Renderable.extend( {	
+	init: function(x, y) {
+		this._super(me.Renderable, 'init', [x, y, 10, 10]); 
+		this.font = new me.BitmapFont("32x32_font", 32);
+		this.font.set("right");
+		this.floating = true;
+		this.initialTime = me.timer.getTime();
+	},
+	update : function () {
+		return true;
+		
+	},
+	draw : function (ctx) {
+		var context = ctx.getContext();
+		var tempo = Math.round((me.timer.getTime()-this.initialTime)/1000);	
+		this.font = new me.Font("Burnstown", 50, '#000000');
+		this.font.bold();
+		this.font.draw(context, 'Tempo: ' + tempo, this.pos.x, this.pos.y);
 	}
 });
