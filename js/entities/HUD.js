@@ -7,18 +7,16 @@ game.HUD.Container = me.Container.extend({
 		this.z = Infinity;
 		this.name = "HUD";
 		
-		this.addChild(new game.HUD.ScoreItem(790, 560));
-		this.addChild(new game.HUD.Velocity(250, 560));
-		this.addChild(new game.HUD.Money(500,500));
-		this.addChild(new game.HUD.Time(500,300));
+		this.addChild(new game.HUD.ScoreItem(460, 570));
+		this.addChild(new game.HUD.Velocity(10, 550));
+		this.addChild(new game.HUD.Money(10,0));
+		this.addChild(new game.HUD.Time(550, 0));
 	}
 });
 
 game.HUD.ScoreItem = me.Renderable.extend( {	
 	init: function(x, y) {
 		this._super(me.Renderable, 'init', [x, y, 10, 10]); 
-		this.font = new me.BitmapFont("32x32_font", 32);
-		this.font.set("right");
 		this.score = -1;
 		this.floating = true;
 	},
@@ -29,29 +27,34 @@ game.HUD.ScoreItem = me.Renderable.extend( {
 		}
 		return false;
 	},
-	draw : function (context) {
-		this.font.draw (context, game.data.score, this.pos.x, this.pos.y);
+	draw : function (ctx) {
+		var context = ctx.getContext();
+		this.font = new me.Font("Burnstown", 30, '#000000');
+		this.font.bold();
+		this.font.draw(context, 'Pontos na carteira: ' + game.data.score + '/20', this.pos.x, this.pos.y);
 	}
 });
 
 game.HUD.Velocity = me.Renderable.extend( {	
 	init: function(x, y) {
 		this._super(me.Renderable, 'init', [x, y, 10, 10]); 
-		this.font = new me.BitmapFont("32x32_font", 32);
-		this.font.set("right");
 		this.velocidade = -1;
 		this.floating = true;
 	},
 	update : function () {
 		var entidadeJogador = me.game.world.getChildByName("mainPlayer")[0];
-		var velocidade = Math.abs((Math.round(entidadeJogador.speed * 10)/10) * 10).toString() + ' KM/H';
+		var _velocidade = Math.abs((Math.round(entidadeJogador.speed * 10)/10) * 10);
+		var velocidade = (_velocidade < 10 ? 0 : _velocidade).toString() + ' KM/H';
 		if (this.velocidade !== velocidade) {	
 			this.velocidade = velocidade;
 			return true;
 		}
 		return false;
 	},
-	draw : function (context) {
+	draw : function (ctx) {
+		var context = ctx.getContext();
+		this.font = new me.Font("Burnstown", 50, '#000000');
+		this.font.bold();
 		this.font.draw (context, this.velocidade, this.pos.x, this.pos.y);
 	}
 });

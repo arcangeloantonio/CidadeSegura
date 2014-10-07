@@ -1,7 +1,6 @@
 //TODO
-// HUD Pontuação/Dinheiro/Tempo/Caixa de Diálogo
-// Entidade Proibido estacionar
-// Pausa
+// HUD Caixa de Diálogo
+// Pausa +/-
 // Resto dos menus
 // Sons
 // Sprite carro
@@ -31,11 +30,6 @@ game.PlayerEntity = me.Entity.extend(
 		context.rotate(this.angle);
 		context.drawImage(carro,-carro.width/2,-carro.width/2);
 		context.restore();
-		
-		// context.beginPath();
-		// context.arc(this.pos.x+16, this.pos.y+32, raio, 0, Math.PI * 2);
-		// context.closePath();
-		// context.stroke();
 		
 		var seta = me.loader.getImage("arrow"); 
 		
@@ -105,6 +99,9 @@ game.TrafficLightEntity = me.Entity.extend(
 		var self = this;
 		this.renderable.setCurrentAnimation("red", function(){self.renderable.setCurrentAnimation("red"); self.status = "OK";})
 		this.alwaysUpdate = true;
+		
+		this.tempo = 0;
+		this.pontuou = false;
 	},
 	update : function ()
 	{
@@ -122,8 +119,16 @@ game.TrafficLightEntity = me.Entity.extend(
 	},
 	collideHandler : function (response) {
  			if (response.b.name == 'mainplayer') {
+				if (this.tempo == 0) this.tempo = me.timer.getTime()+1000;
 				if (this.renderable.isCurrentAnimation('red')) {
-					game.data.score += 250;
+					if (me.timer.getTime() <= this.tempo && !this.pontuou) {
+						game.data.score += 3;
+						this.pontuou = true;
+					}
+					else if (me.timer.getTime() > this.tempo) {
+						this.pontuou = false;
+						this.tempo = 0;
+					}
 				}
 			}
 	}
@@ -172,10 +177,10 @@ game.BusRoadEntity = me.Entity.extend(
 	},
 	collideHandler : function (response) {
 		if (response.b.name == 'mainplayer') {
-			if (this.tempo == 0) this.tempo = me.timer.getTime()+10000;
+			if (this.tempo == 0) this.tempo = me.timer.getTime()+4000;
 			if (me.timer.getTime() >= this.tempo) {
 				me.audio.play("cling");
-				game.data.score += 250;
+				game.data.score += 5;
 				this.tempo = 0;
 			}
 		}
@@ -508,7 +513,7 @@ game.StopEntity = me.Entity.extend(
 			if (this.tempo == 0) this.tempo = me.timer.getTime()+4000;
 			if (me.timer.getTime() >= this.tempo) {
 				me.audio.play("cling");
-				game.data.score += 250;
+				game.data.score += 5;
 				this.tempo = 0;
 			}
 		}

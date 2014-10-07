@@ -18,6 +18,7 @@ game.resources = [
 	{name: "base_out_atlas", type:"image", src: "data/img/map/base_out_atlas.png"},
 	{name: "quarter", type:"image", src: "data/img/map/quarter.png"},
 	{name: "sidewalk", type:"image", src: "data/img/map/sidewalk.png"},	
+	{name: "university", type:"image", src: "data/img/map/university.png"},	
 	{name: "metatiles32x32",  	  type:"image", src: "data/img/map/metatiles32x32.png"},
 	
 	// Inicio
@@ -28,6 +29,7 @@ game.resources = [
 	
 	//Mapa
 	{name: "map", type: "tmx", src: "data/map/map.tmx"},
+	{name: "map_novo", type: "tmx", src: "data/map/map_novo.tmx"},
 	
 	//Sons
 	{name: "dst-inertexponent", type: "audio", src: "data/bgm/"},
