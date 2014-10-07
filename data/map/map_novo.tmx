@@ -76,7 +76,7 @@
   </object>
   <object name="TrafficLightEntity" x="608" y="672" width="192" height="64">
    <properties>
-    <property name="image" value="lights"/>
+    <property name="image" value="lights_horizontal"/>
     <property name="spriteheight" value="64"/>
     <property name="spritewidth" value="192"/>
    </properties>
@@ -97,7 +97,7 @@
   </object>
   <object name="TrafficLightEntity" x="608" y="1504" width="192" height="64">
    <properties>
-    <property name="image" value="lights"/>
+    <property name="image" value="lights_horizontal"/>
     <property name="spriteheight" value="64"/>
     <property name="spritewidth" value="192"/>
    </properties>
@@ -118,7 +118,7 @@
   </object>
   <object name="PedestrianLightEntity" x="736" y="704" width="32" height="160">
    <properties>
-    <property name="image" value="pedestrian_lights"/>
+    <property name="image" value="pedestrian_lights_vertical"/>
     <property name="spriteheight" value="160"/>
     <property name="spritewidth" value="32"/>
    </properties>
@@ -146,7 +146,7 @@
   </object>
   <object name="PedestrianLightEntity" x="1536" y="512" width="32" height="160">
    <properties>
-    <property name="image" value="pedestrian_lights"/>
+    <property name="image" value="pedestrian_lights_vertical"/>
     <property name="spriteheight" value="160"/>
     <property name="spritewidth" value="32"/>
    </properties>
@@ -160,9 +160,23 @@
   </object>
   <object name="TrafficLightEntity" x="1408" y="480" width="192" height="64">
    <properties>
-    <property name="image" value="lights"/>
+    <property name="image" value="lights_horizontal"/>
     <property name="spriteheight" value="64"/>
     <property name="spritewidth" value="192"/>
+   </properties>
+  </object>
+  <object name="TrafficLightEntity" x="1370" y="150" width="192" height="64">
+   <properties>
+    <property name="image" value="lights_horizontal"/>
+    <property name="spriteheight" value="64"/>
+    <property name="spritewidth" value="192"/>
+   </properties>
+  </object>
+  <object name="TrafficLightEntity" x="132" y="258" width="64" height="192">
+   <properties>
+    <property name="image" value="lights_vertical"/>
+    <property name="spriteheight" value="192"/>
+    <property name="spritewidth" value="64"/>
    </properties>
   </object>
  </objectgroup>

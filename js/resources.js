@@ -2,8 +2,10 @@ game.resources = [
 	//Sprites
 	{name: "car",     type:"image",	src: "data/img/sprite/car.png"},
 	{name: "car2",     type:"image",	src: "data/img/sprite/car2.png"},
-	{name: "lights",  type:"image", src: "data/img/sprite/lights.png"},
-	{name: "pedestrian_lights",  type:"image", src: "data/img/sprite/pedestrian_lights.png"},
+	{name: "lights_horizontal",  type:"image", src: "data/img/sprite/lights_horizontal.png"},
+	{name: "lights_vertical",  type:"image", src: "data/img/sprite/lights_vertical.png"},
+	{name: "pedestrian_lights_horizontal",  type:"image", src: "data/img/sprite/pedestrian_lights_horizontal.png"},
+	{name: "pedestrian_lights_vertical",  type:"image", src: "data/img/sprite/pedestrian_lights_vertical.png"},
 	{name: "arrow",  type:"image", src: "data/img/sprite/arrow.png"},
 	{name: "passager",  type:"image", src: "data/img/sprite/passager.png"},
 	{name: "pedestrian",     type:"image",	src: "data/img/sprite/pedestrian.png"},

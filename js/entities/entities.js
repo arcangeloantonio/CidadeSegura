@@ -486,7 +486,7 @@ game.EnemyEntity = me.Entity.extend(
 	},
 	collideHandler: function(response) {
 		if (response.b.name == 'trafficlightentity') {
-			if (response.b.renderable.isCurrentAnimation("red") && response.overlapN.y == 1 && response.overlapN.x == 0) {
+			if (response.b.renderable.isCurrentAnimation("red") && ((response.overlapN.y == 1 && response.overlapN.x == 0) || (response.overlapN.y == 0 && response.overlapN.x == 1))) {
 				this.parado = true;
 			}
 			else {
