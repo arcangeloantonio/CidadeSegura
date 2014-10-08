@@ -9499,6 +9499,8 @@ if (!window.performance.now) {
          * @memberOf me.state
          */
         api.SETTINGS = 8;
+		
+		api.HELP = 9;
 
         /**
          * default state ID for user defined constants<br>

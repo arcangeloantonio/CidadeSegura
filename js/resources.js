@@ -1,5 +1,6 @@
 game.resources = [
 	//Sprites
+	{name: "player", type:"image", src: "data/img/sprite/player.png"},
 	{name: "car",     type:"image",	src: "data/img/sprite/car.png"},
 	{name: "car2",     type:"image",	src: "data/img/sprite/car2.png"},
 	{name: "lights_horizontal",  type:"image", src: "data/img/sprite/lights_horizontal.png"},
@@ -12,6 +13,7 @@ game.resources = [
 	{name: "faixa_onibus_vertical",     type:"image",	src: "data/img/sprite/faixa_onibus_vertical.png"},
 	{name: "faixa_onibus_horizontal",     type:"image",	src: "data/img/sprite/faixa_onibus_horizontal.png"},
 	{name: "stop", type:"image", src: "data/img/sprite/stop.png"},	
+	{name: "rosto", type:"image", src: "data/img/sprite/rosto.png"},
 	
 	//Tiles https://tinypng.com/
 	{name: "tiles", type:"image", src: "data/img/map/tiles.png"},
@@ -25,6 +27,7 @@ game.resources = [
 	
 	// Inicio
 	{name: "title_screen",        type:"image",	src: "data/img/gui/title_screen.png"},
+	{name: "game_over",        type:"image",	src: "data/img/gui/game_over.png"},
 	
 	// Fonte
 	{name: "32x32_font",          type:"image",	src: "data/img/font/32x32_font.png"},

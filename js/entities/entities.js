@@ -1,10 +1,3 @@
-//TODO
-// HUD Caixa de Diálogo
-// Pausa +/-
-// Resto dos menus
-// Sons
-// Sprite carro
-
 game.PlayerEntity = me.Entity.extend(
 {
 	init:function (x, y, settings)
@@ -21,7 +14,7 @@ game.PlayerEntity = me.Entity.extend(
 	},
 	draw: function(ctx) {
 		var context = ctx.getContext();
-		var carro = me.loader.getImage("car"); 
+		var carro = me.loader.getImage("player"); 
 		
 		var raio = 48;
 		
@@ -34,6 +27,7 @@ game.PlayerEntity = me.Entity.extend(
 		var seta = me.loader.getImage("arrow"); 
 		
 		var entidadePassageiro = me.game.world.getChildByName("passagerEntity")[0];
+		entidadePassageiro.update();
 		var anguloPassageiro = this.angleTo(entidadePassageiro) +  (90 * (Math.PI/180));
 		
 		context.save();
@@ -198,7 +192,6 @@ game.PassagerEntity = me.Entity.extend(
 			new me.Vector2d(0, 0), new me.Vector2d(this.width, 0),
 			new me.Vector2d(this.width, this.height), new me.Vector2d(0, this.height)
 		]);
-		
 		this.renderable.addAnimation("passager", [0]);
 		this.renderable.addAnimation("point", [1]);
 
@@ -214,9 +207,12 @@ game.PassagerEntity = me.Entity.extend(
 		if (response.b.name == 'mainplayer') {
 			if (this.renderable.isCurrentAnimation("passager")) {
 				this.renderable.setCurrentAnimation("point", function(){self.renderable.setCurrentAnimation("point"); self.status = "OK";})
+				game.data.balaoFala = game.tipoFala.PEGOU;
 			}
 			else {
 				this.renderable.setCurrentAnimation("passager", function(){self.renderable.setCurrentAnimation("passager"); self.status = "OK";})
+				game.data.balaoFala = game.tipoFala.DEIXOU;
+				game.data.money += 1000;
 			}
 			
 			var tileSortido = this.obterTileCalcada();
@@ -228,7 +224,6 @@ game.PassagerEntity = me.Entity.extend(
 			
 			this.pos.sub({x: tileSortido.pos.x, y: tileSortido.pos.y});
 			this.updateBounds();
-
 		}
 	},
 	obterTilesPreenchidos: function() {

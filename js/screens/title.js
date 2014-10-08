@@ -17,11 +17,11 @@ game.TitleScreen = me.ScreenObject.extend({
             },
             draw : function (ctx) {
 				var context = ctx.getContext();
-				this.desenharFonteCentro(context, "Cidade Segura", 30, 100, "black");
-				this.desenharFonteCentro(context, "Jogar", 220, 50, game.data.posicaoMenu == 1 ? "red" : "black");
-				this.desenharFonteCentro(context, "Opções", 320, 50, game.data.posicaoMenu == 2 ? "red" : "black");
-				this.desenharFonteCentro(context, "Ajuda", 420, 50, game.data.posicaoMenu == 3 ? "red" : "black");
-				this.desenharFonteCentro(context, "Créditos", 520, 50, game.data.posicaoMenu == 4 ? "red" : "black");
+				this.desenharFonteCentro(context, "Cidade Segura", 30, 100, "#000000");
+				this.desenharFonteCentro(context, "Jogar", 220, 50, game.data.posicaoMenu == 1 ? "#FF0000" : "#000000");
+				this.desenharFonteCentro(context, "Configurações", 320, 50, game.data.posicaoMenu == 2 ? "#FF0000" : "#000000");
+				this.desenharFonteCentro(context, "Ajuda", 420, 50, game.data.posicaoMenu == 3 ? "#FF0000" : "#000000");
+				this.desenharFonteCentro(context, "Créditos", 520, 50, game.data.posicaoMenu == 4 ? "#FF0000" : "#000000");
             },			
 			desenharFonteCentro: function(contexto, texto, y, tamanhoFonte, cor) {					
 				this.text = texto;
@@ -32,14 +32,23 @@ game.TitleScreen = me.ScreenObject.extend({
         })), 2);
 		
         me.input.bindKey(me.input.KEY.ENTER, "enter", true);
+		me.input.bindKey(me.input.KEY.ESC, "esc", true);
 		
         this.handler = me.event.subscribe(me.event.KEYDOWN, function (action, keyCode, edge) {
             if (action === "enter") {
-				if (game.data.posicaoMenu === 1) {
-					me.state.change(me.state.PLAY);
-				}
-				else if (game.data.posicaoMenu === 4) {
-					me.state.change(me.state.CREDITS);
+				switch (game.data.posicaoMenu) {
+					case 1:
+						me.state.change(me.state.PLAY);
+						break;
+					case 2:
+						me.state.change(me.state.SETTINGS);
+						break;
+					case 3:
+						me.state.change(me.state.HELP);
+						break;
+					case 4:
+						me.state.change(me.state.CREDITS);
+						break;
 				}
             }
 			else if (action === "up") {

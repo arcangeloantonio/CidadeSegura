@@ -1,4 +1,4 @@
-game.CreditScreen = me.ScreenObject.extend({
+game.ConfigScreen = me.ScreenObject.extend({
     onResetEvent : function() {
         me.game.world.addChild(new (me.Renderable.extend ({
             init : function() {
@@ -25,9 +25,10 @@ game.CreditScreen = me.ScreenObject.extend({
 				context.lineWidth = 7;
 				context.strokeStyle = '#A2C969';
 				context.stroke();
-				this.desenharFonteCentro(context, "Créditos", 200, 50, '#000000');
-				this.desenharFonteCentro(context, "Programador: Antonio Ruggiero Arcangelo", 300, 30, '#000000');
-				this.desenharFonteCentro(context, "Designer: Diego Fernandes Resende", 350, 30, '#000000');
+				
+				var textoSom = game.data.somLigado ? "LIGADO" : "DESLIGADO";
+				this.desenharFonteCentro(context, "Configurações", 200, 50, '#000000');
+				this.desenharFonteCentro(context, "Som:    < " + textoSom +  " >", 300, 30, '#FF0000');
             },			
 			desenharFonteCentro: function(contexto, texto, y, tamanhoFonte, cor) {					
 				this.text = texto;
@@ -41,6 +42,15 @@ game.CreditScreen = me.ScreenObject.extend({
             if (action === "enter" || action === "esc") {
 				me.state.change(me.state.MENU);
             }
+			else if (action === "left" || action === "right") {
+				if (game.data.somLigado) {
+					me.audio.disable();
+				}
+				else {
+					me.audio.enable();
+				}
+				game.data.somLigado = !game.data.somLigado;
+			}
         });
 		
     },

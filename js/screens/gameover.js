@@ -1,5 +1,12 @@
-game.CreditScreen = me.ScreenObject.extend({
+game.GameOver = me.ScreenObject.extend({
     onResetEvent : function() {
+        me.game.world.addChild(
+            new me.Sprite(
+                0,0, 
+                me.loader.getImage('game_over')
+            ),
+            1
+        );
         me.game.world.addChild(new (me.Renderable.extend ({
             init : function() {
                 this._super(me.Renderable, 'init', [0, 0, me.game.viewport.width, me.game.viewport.height]);
@@ -9,42 +16,26 @@ game.CreditScreen = me.ScreenObject.extend({
             },
             draw : function (ctx) {
 				var context = ctx.getContext();
-				context.beginPath();
-				
-				context.rect(100, 200, 600 , 50);
-				context.fillStyle = '#99C6E0';
-				context.fill();
-				context.lineWidth = 7;
-				context.strokeStyle = '#A2C969';
-				context.stroke();
-				
-				
-				context.rect(100, 250, 600 , 175);
-				context.fillStyle = '#99C6E0';
-				context.fill();
-				context.lineWidth = 7;
-				context.strokeStyle = '#A2C969';
-				context.stroke();
-				this.desenharFonteCentro(context, "Créditos", 200, 50, '#000000');
-				this.desenharFonteCentro(context, "Programador: Antonio Ruggiero Arcangelo", 300, 30, '#000000');
-				this.desenharFonteCentro(context, "Designer: Diego Fernandes Resende", 350, 30, '#000000');
+				this.desenharFonteCentro(context, "Você perdeu! :(", 50, 50, "#FF0000");
             },			
 			desenharFonteCentro: function(contexto, texto, y, tamanhoFonte, cor) {					
 				this.text = texto;
 				this.font = new me.Font("Burnstown", tamanhoFonte, cor);
 				var measureTitle = this.font.measureText(contexto, this.text);
 				this.font.draw(contexto, this.text, me.game.viewport.width/2 - measureTitle.width/2, y);	
-			},
-        })), 1);
+			}
+        })), 2);
 		
+		me.input.bindKey(me.input.KEY.ENTER, "enter", true);
+		me.input.bindKey(me.input.KEY.ESC, "esc", true);
         this.handler = me.event.subscribe(me.event.KEYDOWN, function (action, keyCode, edge) {
             if (action === "enter" || action === "esc") {
 				me.state.change(me.state.MENU);
-            }
+			}
         });
-		
     },
     onDestroyEvent : function() {
+        me.input.unbindKey(me.input.KEY.ENTER);
         me.event.unsubscribe(this.handler);
    }
 });

@@ -7,10 +7,58 @@ game.HUD.Container = me.Container.extend({
 		this.z = Infinity;
 		this.name = "HUD";
 		
+		this.addChild(new game.HUD.Speak(0, 0));
 		this.addChild(new game.HUD.ScoreItem(460, 570));
 		this.addChild(new game.HUD.Velocity(10, 550));
 		this.addChild(new game.HUD.Money(10,0));
 		this.addChild(new game.HUD.Time(550, 0));
+	}
+});
+
+game.HUD.Speak = me.Renderable.extend( {
+	init: function(x, y) {
+		this._super(me.Renderable, 'init', [x, y, 10, 10]); 
+		this.floating = true;
+		this.tempo = 0;
+		this.falasPegou = ['Por favor, leve-me até meu destino!', 'Rápido, preciso chegar na outra zona da cidade!',  'Leve-me para próximo a minha casa!'];
+		this.falasDeixou = ['Obrigado!', 'Foi uma ótima corrida!',  'Você é um ótimo motorista!'];
+		this.fala = '';
+	},
+	update : function () {
+		return true;
+	},
+	draw : function (ctx) {
+		if (game.data.balaoFala != game.tipoFala.NENHUM) {
+			if (this.tempo == 0) this.tempo = me.timer.getTime()+2000;
+			if (this.tempo >= me.timer.getTime()) {
+				if (this.fala == '') {
+					switch (game.data.balaoFala) {
+						case game.tipoFala.PEGOU:
+							this.fala = this.falasPegou[Math.floor((Math.random() * 3))];
+							break;
+						case game.tipoFala.DEIXOU:
+							this.fala = this.falasDeixou[Math.floor((Math.random() * 3))];
+							break;
+					}
+				}
+				var context = ctx.getContext();
+				context.beginPath();
+				context.rect(10, 445, 780 , 150);
+				context.fillStyle = 'rgba(0,0,0,0.5)';
+				context.fill();
+				context.lineWidth = 7;
+				context.strokeStyle = '#99C6E0';
+				context.stroke();
+				context.drawImage(me.loader.getImage("rosto"), 30, 455);
+				this.font = new me.Font("Burnstown", 30, '#99C6E0');
+				this.font.draw(context, this.fala, 190, 500);
+			}
+			else {
+				this.tempo = 0;
+				game.data.balaoFala = game.tipoFala.NENHUM;
+				this.fala = '';
+			}
+		}
 	}
 });
 
@@ -24,6 +72,9 @@ game.HUD.ScoreItem = me.Renderable.extend( {
 		if (this.score !== game.data.score) {	
 			this.score = game.data.score;
 			return true;
+		}
+		if (game.data.score > 20) {
+			me.state.change(me.state.GAMEOVER);
 		}
 		return false;
 	},
@@ -62,7 +113,6 @@ game.HUD.Velocity = me.Renderable.extend( {
 game.HUD.Money = me.Renderable.extend( {	
 	init: function(x, y) {
 		this._super(me.Renderable, 'init', [x, y, 10, 10]); 
-		this.money = 1000;
 		this.floating = true;
 	},
 	update : function () {
@@ -72,7 +122,7 @@ game.HUD.Money = me.Renderable.extend( {
 		var context = ctx.getContext();
 		this.font = new me.Font("Burnstown", 50, '#000000');
 		this.font.bold();
-		this.font.draw(context, 'R$: ' + this.money, this.pos.x, this.pos.y);
+		this.font.draw(context, 'R$: ' + game.data.money, this.pos.x, this.pos.y);		
 	}
 });
 
