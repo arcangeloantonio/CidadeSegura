@@ -192,6 +192,7 @@ game.PassagerEntity = me.Entity.extend(
 			new me.Vector2d(0, 0), new me.Vector2d(this.width, 0),
 			new me.Vector2d(this.width, this.height), new me.Vector2d(0, this.height)
 		]);
+		
 		this.renderable.addAnimation("passager", [0]);
 		this.renderable.addAnimation("point", [1]);
 
@@ -200,6 +201,7 @@ game.PassagerEntity = me.Entity.extend(
 	},
 	update: function(dt) {
 		this.body.update();
+		this.updateBounds();
 		me.collision.check(this, true, this.collideHandler.bind(this), true);
 		
 	},

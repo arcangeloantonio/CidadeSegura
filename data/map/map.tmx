@@ -68,11 +68,11 @@
     <property name="spritewidth" value="32"/>
    </properties>
   </object>
-  <object name="PassagerEntity" x="162" y="33" width="32" height="32">
+  <object name="PassagerEntity" x="160" y="64" width="48" height="48">
    <properties>
     <property name="image" value="passager"/>
-    <property name="spriteheight" value="32"/>
-    <property name="spritewidth" value="32"/>
+    <property name="spriteheight" value="48"/>
+    <property name="spritewidth" value="48"/>
    </properties>
   </object>
   <object name="PedestrianEntity" x="576" y="288" width="448" height="576">
