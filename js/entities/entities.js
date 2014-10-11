@@ -20,7 +20,7 @@ game.PlayerEntity = me.Entity.extend(
 		var raio = 48;
 		
 		context.save();
-		context.translate(this.pos.x+16, this.pos.y+16);
+		context.translate(this.pos.x+16, this.pos.y+25);
 		context.rotate(this.angle);
 		context.drawImage(carro,-carro.width/2,-carro.width/2);
 		context.restore();
@@ -158,6 +158,9 @@ game.PedestrianLightEntity = me.Entity.extend(
 			else {
 				response.a.renderable.setCurrentAnimation("green", function(){this.renderable.setCurrentAnimation("green"); this.status = "OK";});
 			}
+		}
+		else if (response.b.name == 'mainplayer') {
+			game.data.score = 21;
 		}
 	}
 });
@@ -543,15 +546,23 @@ game.EnemyEntity = me.Entity.extend(
 				this.parado = false;
 			}
 		}
-		// else if (response.b.name === "mainplayer") {
-			// response.b.body.vel.x = 0;
-			// response.b.body.vel.y = 0;
-			// response.b.body.accel.x = 0;
-			// response.b.body.accel.y = 0;
-			// response.b.speed = 0;
-			// console.log(response);
-			// console.log(response.b);
-		// }
+		else if (response.b.name === "mainplayer") {
+			response.b.body.vel.x = 0;
+			response.b.body.vel.y = 0;
+			response.b.body.accel.x = 0;
+			response.b.body.accel.y = 0;
+			this.body.setVelocity(0, 0);
+			if (!me.input.isKeyPressed("down")) {
+				response.b.speed = 0;				
+			}
+			
+			if (response.b.speed != 0) {
+				this.body.setVelocity(4, 4);
+			}
+			
+			console.log(response);
+			console.log(response.b);
+		}
 	}
 });
 
