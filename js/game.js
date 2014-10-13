@@ -4,7 +4,7 @@ var game = {
 		score : 0,
 		posicaoMenu: 1,
 		balaoFala: 0,
-		money: 1000,
+		money: 300,
 		somLigado: true
 	},
     "onload" : function () {

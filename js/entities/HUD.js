@@ -67,13 +67,22 @@ game.HUD.ScoreItem = me.Renderable.extend( {
 		this._super(me.Renderable, 'init', [x, y, 10, 10]); 
 		this.score = -1;
 		this.floating = true;
+		this.tempo = me.timer.getTime()+20000;
 	},
 	update : function () {
 		if (this.score !== game.data.score) {	
 			this.score = game.data.score;
+			this.tempo = me.timer.getTime()+20000;
 			return true;
 		}
-		if (game.data.score > 20) {
+		
+		if (this.tempo <= me.timer.getTime()) {
+			if (game.data.score > 0) {
+				game.data.score -= 1;
+			}
+		}
+		
+		if (game.data.score > 19) {
 			me.state.change(me.state.GAMEOVER);
 		}
 		return false;
@@ -110,7 +119,7 @@ game.HUD.Velocity = me.Renderable.extend( {
 	}
 });
 
-game.HUD.Money = me.Renderable.extend( {	
+game.HUD.Money = me.Renderable.extend({	
 	init: function(x, y) {
 		this._super(me.Renderable, 'init', [x, y, 10, 10]); 
 		this.floating = true;
@@ -122,7 +131,7 @@ game.HUD.Money = me.Renderable.extend( {
 		var context = ctx.getContext();
 		this.font = new me.Font("Burnstown", 50, '#000000');
 		this.font.bold();
-		this.font.draw(context, 'R$: ' + game.data.money, this.pos.x, this.pos.y);		
+		this.font.draw(context, 'R$: ' + game.data.money.toFixed(2), this.pos.x, this.pos.y);		
 	}
 });
 

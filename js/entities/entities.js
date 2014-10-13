@@ -120,7 +120,7 @@ game.TrafficLightEntity = me.Entity.extend(
 				if (this.tempo == 0) this.tempo = me.timer.getTime()+1000;
 				if (this.renderable.isCurrentAnimation('red')) {
 					if (me.timer.getTime() <= this.tempo && !this.pontuou) {
-						//R$ 191,54
+						game.data.money -= 191.54;
 						game.data.score += 7;
 						this.pontuou = true;
 					}
@@ -181,7 +181,7 @@ game.BusRoadEntity = me.Entity.extend(
 		if (response.b.name == 'mainplayer') {
 			if (this.tempo == 0) this.tempo = me.timer.getTime()+4000;
 			if (me.timer.getTime() >= this.tempo) {
-				//125,69
+				game.data.money -= 127.69;
 				game.data.score += 5;
 				this.tempo = 0;
 			}
@@ -222,7 +222,7 @@ game.PassagerEntity = me.Entity.extend(
 			else {
 				this.renderable.setCurrentAnimation("passager", function(){self.renderable.setCurrentAnimation("passager"); self.status = "OK";})
 				game.data.balaoFala = game.tipoFala.DEIXOU;
-				game.data.money += 1000;
+				game.data.money += 50;
 			}
 			
 			var tileSortido = this.obterTileCalcada();
@@ -404,7 +404,6 @@ game.PedestrianEntity  = me.Entity.extend(
 		return false;
 	},
 	collideHandler : function (response) {
-		
 		if (response.b.name == 'pedestrianlightentity') {
 			if (response.b.renderable.isCurrentAnimation("red") && response.overlapN.y == 1 && response.overlapN.x == 0) {
 				response.a.body.vel.y = 0;
@@ -559,9 +558,6 @@ game.EnemyEntity = me.Entity.extend(
 			if (response.b.speed != 0) {
 				this.body.setVelocity(4, 4);
 			}
-			
-			console.log(response);
-			console.log(response.b);
 		}
 	}
 });
@@ -582,13 +578,60 @@ game.StopEntity = me.Entity.extend(
 		if (response.b.name == 'mainplayer') {
 			if (this.tempo == 0) this.tempo = me.timer.getTime()+4000;
 			if (me.timer.getTime() >= this.tempo) {
-				//85,12
+				game.data.money -= 86.13
 				game.data.score += 4;
 				this.tempo = 0;
 			}
 		}
 	}
 });
+
+// game.VelocityEntity = me.Entity.extend(
+// {
+	// init:function (x, y, settings)
+	// {
+		// this._super(me.Entity, 'init', [x, y , settings]);
+	// },
+	// update: function() {
+		// me.collision.check(this, true, this.collideHandler.bind(this), true);
+	// },
+	// collideHandler : function (response) {
+		 // if (response.b.name == 'mainplayer') {
+			 // if (this.tempo == 0) this.tempo = me.timer.getTime()+4000;
+				// if (me.timer.getTime() >= this.tempo) {
+					// var velocidade = Math.abs((Math.round(response.b.speed * 10)/10) * 10);
+					// //if (20%) {}
+					// //game.data.score += 4;
+					// //game.data.money -= 86,13;
+					// //if (50%) {}
+					// //game.data.score += 7;
+					// //game.data.money -= 574,60;
+				// this.tempo = 0;
+			// // }
+		// // }
+	// }
+// });
+
+// game.OtherHandEntity = me.Entity.extend(
+// {
+	// init:function (x, y, settings)
+	// {
+		// this._super(me.Entity, 'init', [x, y , settings]);
+	// },
+	// update: function() {
+		// me.collision.check(this, true, this.collideHandler.bind(this), true);
+	// },
+	// collideHandler : function (response) {
+		// // if (response.b.name == 'mainplayer') {
+			// // if (this.tempo == 0) this.tempo = me.timer.getTime()+4000;
+			// // if (me.timer.getTime() >= this.tempo) {
+				// // //85,12
+				// // game.data.score += 4;
+				// // this.tempo = 0;
+			// // }
+		// // }
+	// }
+// });
 
 // game.SideWalkEntity = me.Entity.extend(
 // {
