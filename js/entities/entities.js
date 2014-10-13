@@ -3,7 +3,7 @@ game.PlayerEntity = me.Entity.extend(
 	init:function (x, y, settings)
 	{
 		settings.width = 32;
-		settings.height = 48;
+		settings.height = 32;
 		
 		this.angle = 0;
 		this._super(me.Entity, 'init', [x, y , settings]);
@@ -20,7 +20,7 @@ game.PlayerEntity = me.Entity.extend(
 		var raio = 48;
 		
 		context.save();
-		context.translate(this.pos.x+16, this.pos.y+25);
+		context.translate(this.pos.x+16, this.pos.y+16);
 		context.rotate(this.angle);
 		context.drawImage(carro,-carro.width/2,-carro.width/2);
 		context.restore();
@@ -610,5 +610,3 @@ game.StopEntity = me.Entity.extend(
 		// // }
 	// }
 // });
-
-
