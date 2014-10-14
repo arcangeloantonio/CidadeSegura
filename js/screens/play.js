@@ -1,7 +1,7 @@
 game.PlayScreen = me.ScreenObject.extend({
 	onResetEvent: function() {			
 		me.audio.playTrack("DST-InertExponent");
-		me.levelDirector.loadLevel("map");
+		me.levelDirector.loadLevel("map_novo");
 		game.data.score = 0;
 		
 		this.HUD = new game.HUD.Container();
