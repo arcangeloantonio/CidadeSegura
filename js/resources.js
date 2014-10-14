@@ -37,8 +37,12 @@ game.resources = [
 	{name: "map_novo", type: "tmx", src: "data/map/map_novo.tmx"},
 	
 	//Sons
-	{name: "dst-inertexponent", type: "audio", src: "data/bgm/"},
-	{name: "cling", type: "audio", src: "data/sfx/"},
-	{name: "stomp", type: "audio", src: "data/sfx/"},
-	{name: "jump",  type: "audio", src: "data/sfx/"}
+	{name: "afro_american", type: "audio", src: "data/bgm/"},
+	{name: "latin_flute", type: "audio", src: "data/bgm/"},
+	{name: "car_crash", type: "audio", src: "data/sfx/"},
+	{name: "car_accel", type: "audio", src: "data/sfx/"},
+	{name: "car_stop", type: "audio", src: "data/sfx/"},
+	{name: "change_menu", type: "audio", src: "data/sfx/"},
+	{name: "select_menu", type: "audio", src: "data/sfx/"},
+	// {name: "jump",  type: "audio", src: "data/sfx/"}
 ];

@@ -1,5 +1,9 @@
 game.TitleScreen = me.ScreenObject.extend({
     onResetEvent : function() {
+		me.audio.playTrack("afro_american");
+		me.audio.stop("latin_flute");
+		me.audio.stop("car_accel");
+		me.audio.stop("car_stop");
         me.game.world.addChild(
             new me.Sprite(
                 0,0, 
@@ -36,6 +40,7 @@ game.TitleScreen = me.ScreenObject.extend({
 		
         this.handler = me.event.subscribe(me.event.KEYDOWN, function (action, keyCode, edge) {
             if (action === "enter") {
+				me.audio.play("select_menu", false, null, 0.1);
 				switch (game.data.posicaoMenu) {
 					case 1:
 						me.state.change(me.state.PLAY);
@@ -53,9 +58,11 @@ game.TitleScreen = me.ScreenObject.extend({
             }
 			else if (action === "up") {
 				game.data.posicaoMenu = game.data.posicaoMenu == 1 ? game.data.posicaoMenu : game.data.posicaoMenu - 1;
+				me.audio.play("change_menu", false, null, 0.1);
 			}
 			else if (action === "down") {
 				game.data.posicaoMenu = game.data.posicaoMenu == 4 ? game.data.posicaoMenu : game.data.posicaoMenu + 1;
+				me.audio.play("change_menu", false, null, 0.1);
 			}
         });
     },

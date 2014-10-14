@@ -12,6 +12,10 @@ game.PlayerEntity = me.Entity.extend(
 		me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
 		this.alwaysUpdate = true;
 		
+		this.somAcelerando = false;
+		this.tempoAcelerando = 0;
+		this.tempoRe = 0;
+		
 	},
 	draw: function(ctx) {
 		var context = ctx.getContext();
@@ -42,6 +46,17 @@ game.PlayerEntity = me.Entity.extend(
 	},
 	update : function (dt)
 	{
+		
+		if (me.input.keyStatus('up') != true) {
+			me.audio.stop("car_accel");
+			this.tempoAcelerando = 0;
+		}
+		if (me.input.keyStatus('down') != true) {
+			me.audio.stop("car_stop");
+			this.tempoRe = 0;
+		}
+		
+		
 		this.z = 99;
 		this.speed *= 0.99;
 		if (me.input.isKeyPressed('up') || me.input.isKeyPressed('down') || me.input.isKeyPressed('left') || me.input.isKeyPressed('right')) {
@@ -51,13 +66,26 @@ game.PlayerEntity = me.Entity.extend(
 			if (me.input.isKeyPressed("right")) {
 				this.angle += 0.02 * this.speed;
 			}
+			
 			if (me.input.isKeyPressed("up")) {
+				if (this.speed < 0) this.speed = 0;
+				if (this.tempoAcelerando <= me.timer.getTime() || this.tempoAcelerando == 0) {
+					me.audio.stop("car_stop");
+					me.audio.playTrack("car_accel", false, null, 0.1);
+					this.tempoAcelerando  = me.timer.getTime() + 6000;
+				}			
 				
 				this.speed += 0.05;
 				this.body.vel.x = Math.sin(this.angle) * this.speed * me.timer.tick;
 				this.body.vel.y = -Math.cos(this.angle) * this.speed * me.timer.tick;
 			}
 			if (me.input.isKeyPressed("down")) {
+				if (this.speed > 0) this.speed = 0;
+				if (this.tempoRe <= me.timer.getTime() || this.tempoRe == 0) {
+					me.audio.stop("car_accel");
+					me.audio.play("car_stop", false);
+					this.tempoRe  = me.timer.getTime() + 3000;
+				}	
 				this.speed -= 0.05;
 				this.body.vel.x = Math.sin(this.angle) * this.speed * me.timer.tick;
 				this.body.vel.y = -Math.cos(this.angle) * this.speed * me.timer.tick;
@@ -174,7 +202,7 @@ game.BusRoadEntity = me.Entity.extend(
 		this.tempo = 0;
 	},
 	update: function() {
-		this.z = 7;
+		this.z = 6;
 		me.collision.check(this, true, this.collideHandler.bind(this), true);
 	},
 	collideHandler : function (response) {

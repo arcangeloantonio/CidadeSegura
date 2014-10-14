@@ -125,13 +125,16 @@ game.HUD.Money = me.Renderable.extend({
 		this.floating = true;
 	},
 	update : function () {
+		if (game.data.money < 0) {
+			me.state.change(me.state.GAMEOVER);
+		}
 		return true;
 	},
 	draw : function (ctx) {
 		var context = ctx.getContext();
 		this.font = new me.Font("Burnstown", 50, '#000000');
 		this.font.bold();
-		this.font.draw(context, 'R$: ' + game.data.money.toFixed(2), this.pos.x, this.pos.y);		
+		this.font.draw(context, 'R$: ' + game.data.money.toFixed(2).replace('.', ','), this.pos.x, this.pos.y);		
 	}
 });
 

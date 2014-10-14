@@ -1,5 +1,9 @@
 game.GameOver = me.ScreenObject.extend({
     onResetEvent : function() {
+		me.audio.stop("afro_american");
+		me.audio.stop("latin_flute");
+		me.audio.stop("car_accel");
+		me.audio.stop("car_stop");
         me.game.world.addChild(
             new me.Sprite(
                 0,0, 
