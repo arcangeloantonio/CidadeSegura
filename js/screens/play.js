@@ -1,6 +1,5 @@
 game.PlayScreen = me.ScreenObject.extend({
-	onResetEvent: function() {			
-<<<<<<< HEAD
+	onResetEvent: function() {
 		me.audio.playTrack("latin_flute");
 		me.audio.stop("afro_american");
 		me.audio.stop("car_accel");
@@ -8,6 +7,7 @@ game.PlayScreen = me.ScreenObject.extend({
 		me.levelDirector.loadLevel("map_novo");
 
 		game.data.score = 0;
+		game.data.money = 300;
 		
 		this.HUD = new game.HUD.Container();
 		me.game.world.addChild(this.HUD);
