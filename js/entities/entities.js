@@ -187,9 +187,6 @@ game.PedestrianLightEntity = me.Entity.extend(
 				response.a.renderable.setCurrentAnimation("green", function(){this.renderable.setCurrentAnimation("green"); this.status = "OK";});
 			}
 		}
-		else if (response.b.name == 'mainplayer') {
-			game.data.score = 21;
-		}
 	}
 });
 
@@ -443,6 +440,9 @@ game.PedestrianEntity  = me.Entity.extend(
 				if (this.stopY) response.a.body.vel.x = 2;
 				this.parado = false;
 			}
+		}
+		else if (response.b.name == 'mainplayer') {
+			game.data.score = 21;
 		}
 	}
 });
