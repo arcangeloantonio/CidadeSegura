@@ -123,8 +123,8 @@ game.TrafficLightEntity = me.Entity.extend(
 		this.renderable.setCurrentAnimation("red", function(){self.renderable.setCurrentAnimation("red"); self.status = "OK";})
 		this.alwaysUpdate = true;
 		
+		this.tempoMudaFarol = Math.floor((Math.random() * 5)+3);
 		
-		this.tempoMudaFarol = (Math.random() * 7)+1
 		
 		this.tempo = 0;
 		this.pontuou = false;
