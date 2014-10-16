@@ -4,7 +4,7 @@ game.PlayScreen = me.ScreenObject.extend({
 		me.audio.stop("afro_american");
 		me.audio.stop("car_accel");
 		me.audio.stop("car_stop");
-		me.levelDirector.loadLevel("map_novo");
+		me.levelDirector.loadLevel("map");
 
 		game.data.score = 0;
 		game.data.money = 300;
