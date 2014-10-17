@@ -42,11 +42,10 @@ game.PlayerEntity = me.Entity.extend(
 		context.drawImage(seta, -seta.width*0.75, -seta.height * 0.5);
 		
 		context.setTransform(1,0,0,1,0,0);
-		context.restore();		
+		context.restore();	
 	},
 	update : function (dt)
 	{
-		
 		if (me.input.keyStatus('up') != true) {
 			me.audio.stop("car_accel");
 			this.tempoAcelerando = 0;
@@ -56,15 +55,14 @@ game.PlayerEntity = me.Entity.extend(
 			this.tempoRe = 0;
 		}
 		
-		
 		this.z = 99;
 		this.speed *= 0.99;
 		if (me.input.isKeyPressed('up') || me.input.isKeyPressed('down') || me.input.isKeyPressed('left') || me.input.isKeyPressed('right')) {
 			if (me.input.isKeyPressed("left")) {
-				this.angle -= 0.02 * this.speed;
+				this.angle -= 0.01 * this.speed;
 			}
 			if (me.input.isKeyPressed("right")) {
-				this.angle += 0.02 * this.speed;
+				this.angle += 0.01 * this.speed;
 			}
 			
 			if (me.input.isKeyPressed("up")) {
@@ -74,10 +72,7 @@ game.PlayerEntity = me.Entity.extend(
 					me.audio.playTrack("car_accel", false, null, 0.1);
 					this.tempoAcelerando  = me.timer.getTime() + 6000;
 				}			
-				
-				this.speed += 0.05;
-				this.body.vel.x = Math.sin(this.angle) * this.speed * me.timer.tick;
-				this.body.vel.y = -Math.cos(this.angle) * this.speed * me.timer.tick;
+				this.speed += 0.06;
 			}
 			if (me.input.isKeyPressed("down")) {
 				if (this.speed > 0) this.speed = 0;
@@ -86,17 +81,15 @@ game.PlayerEntity = me.Entity.extend(
 					me.audio.play("car_stop", false);
 					this.tempoRe  = me.timer.getTime() + 3000;
 				}	
-				this.speed -= 0.05;
-				this.body.vel.x = Math.sin(this.angle) * this.speed * me.timer.tick;
-				this.body.vel.y = -Math.cos(this.angle) * this.speed * me.timer.tick;
+				this.speed -= 0.06;
 			}
 		}
-		else {
-			this.body.vel.x *= 0.95;
-			this.body.vel.y *= 0.95;
-		}
 		
-		this.renderable.angle = this.angle;
+		this.body.vel.x = Math.sin(this.angle) * this.speed;
+		this.body.vel.y = -Math.cos(this.angle) * this.speed;
+		this.atrito(.001);
+		
+		this.renderable.angle = this.angle - (270 * (Math.PI/180));
 		this.body.update(dt);
 
 		 if (this.body.vel.x!=0 || this.body.vel.y!=0 && !this.colidiu)
@@ -105,7 +98,16 @@ game.PlayerEntity = me.Entity.extend(
 			return true;
 		}
 		return false;
-	}
+	},
+	atrito: function(valor){
+             if(this.speed < 0){
+                this.speed += valor;
+            }
+            else if(this.speed > 0){
+                this.speed -= valor;
+            }
+        }
+
 });
 
 game.TrafficLightEntity = me.Entity.extend(
@@ -496,7 +498,7 @@ game.EnemyEntity = me.Entity.extend(
 		this.alwaysUpdate = true;
 		this.body.setVelocity(4, 4);
 		this.parado = false;
-		this.direcao = settings.direcao;
+		this.direcao = settings.direcao === undefined ? "e" : settings.direcao;
 	},
 	update : function (dt)
 	{

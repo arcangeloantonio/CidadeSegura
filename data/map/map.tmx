@@ -77,7 +77,6 @@
   </object>
   <object name="EnemyEntity" x="96" y="32" width="160" height="384">
    <properties>
-    <property name="direcao" value="e"/>
     <property name="image" value="car"/>
     <property name="spriteheight" value="64"/>
     <property name="spritewidth" value="32"/>

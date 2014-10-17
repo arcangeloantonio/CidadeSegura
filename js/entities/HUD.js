@@ -105,7 +105,7 @@ game.HUD.Velocity = me.Renderable.extend( {
 		var entidadeJogador = me.game.world.getChildByName("mainPlayer")[0];
 		if (entidadeJogador === undefined) return true;
 		var _velocidade = Math.abs((Math.round(entidadeJogador.speed * 10)/10) * 10);
-		var velocidade = (_velocidade < 10 ? 0 : _velocidade).toString() + ' KM/H';
+		var velocidade = _velocidade.toString() + ' KM/H';
 		if (this.velocidade !== velocidade) {	
 			this.velocidade = velocidade;
 			return true;
