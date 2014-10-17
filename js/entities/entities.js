@@ -452,10 +452,12 @@ game.EnemyEntity = me.Entity.extend(
 	init: function (x, y, settings)
 	{		
 		var width = settings.width;
-		var height = settings.height;;
+		var height = settings.height;
 
 		settings.spritewidth = settings.width = 32;
-		settings.spriteheight = settings.height = 64;		
+		settings.spriteheight = settings.height = 64;
+		
+		settings.height = 32;
 		
 		this._super(me.Entity, 'init', [x, y , settings]);
 
@@ -486,82 +488,72 @@ game.EnemyEntity = me.Entity.extend(
 
 		y = this.pos.y;
 		this.startY = y;
-		this.endY   = y + height - settings.spriteheight;
+		this.endY   = y + height - 32;
 		this.pos.y  = y + height - settings.spriteheight;
 
 		this.updateBounds();
 
-		this.auxX = true;
-		this.auxY = true;
-		
-		this.stopX = true;
-		this.stopY = false;
-
 		this.alwaysUpdate = true;
-		this.body.setVelocity(0, 4);
+		this.body.setVelocity(4, 4);
 		this.parado = false;
-		
-		if (this.pos.y > this.endY)  {
-			if (this.body.accel.y > 0) this.body.accel.y = -this.body.accel.y;
-		}
-		
+		this.direcao = settings.direcao;
 	},
 	update : function (dt)
 	{
-		console.log(this.endY, this.startY, this.pos.y);
-		if (this.pos.y <= this.endY && this.pos.y >= this.startY) {
-			this.body.vel.y += this.body.accel.y * me.timer.tick;
+		var yTopo = this.pos.y <= this.startY;
+		var yBaixo = this.pos.y >= this.endY;
+		
+		var xEsquerda = this.pos.x <= this.startX;
+		var xDireita = this.pos.x >= this.endX;
+		
+		var andarCima = false;
+		var andarBaixo = false;
+		var andarDireita = false;
+		var andarEsquerda = false;
+		
+		if (this.direcao === 'e') {
+			andarCima = !yTopo && xDireita;
+			andarEsquerda = yTopo && !xEsquerda;
+			andarBaixo = !yBaixo && xEsquerda;
+			andarDireita = yBaixo && !xDireita;
 		}
 		else {
-			this.body.accel.y = this.body.accel.y * -1;
+			andarEsquerda = yBaixo && !xEsquerda;
+			andarCima = !yTopo && xEsquerda;
+			andarDireita = yTopo && !xDireita;
+			andarBaixo = !yBaixo && xDireita;
 		}
-		// if (!this.stopY && (this.pos.y >= this.endY || this.pos.y <= this.startY))
-		// {
-			// this.stopY = true;
-			// this.auxX = true;
-		// }
+		if (andarEsquerda) {
+			this.body.vel.x -= this.body.accel.x * me.timer.tick;
+			this.renderable.angle = (270 * (Math.PI/180));
+		}
+		else {
+			if (!andarDireita) this.body.vel.x = 0;
+		}
 		
-		// if (!this.stopX && (this.pos.x >= this.endX || this.pos.x <= this.startX)) {
-			// this.stopX = true;
-			// this.auxY = true;
-		// }
+		if (andarDireita) {
+			this.body.vel.x += this.body.accel.x * me.timer.tick;
+			this.renderable.angle = (90 * (Math.PI/180));
+		}
+		else {
+			if (!andarEsquerda) this.body.vel.x = 0;
+		}
 		
+		if (andarCima) {
+			if (!andarBaixo) this.body.vel.y -= this.body.accel.y * me.timer.tick;
+			this.renderable.angle = (0 * (Math.PI/180));
+		}
+		else {
+			this.body.vel.y = 0;
+		}
 		
-		// if (this.stopX) {
-			// if (this.stopY && this.auxX) {
-				// this.body.vel.y = 0;
-				// this.stopX = false;
-				// this.auxX = false;
-			// }
-			// else {
-				// if (this.pos.x <= this.endX) {
-					// this.body.vel.y += this.body.accel.y * me.timer.tick;
-					// this.renderable.angle = 3.1;
-				// }
-				// if (this.pos.x >= this.startX) {
-					// this.body.vel.y -= this.body.accel.y * me.timer.tick;
-					// this.renderable.angle = 0;
-				// }
-			// }
-		// }
-		
-		// if (this.stopY) {
-			// if (this.stopX && this.auxY) {
-				// this.body.vel.x = 0;
-				// this.stopY = false;
-				// this.auxY = false;
-			// }
-			// else {
-				// if (this.pos.y >= this.endY) {
-					// this.body.vel.x += this.body.accel.x * me.timer.tick;
-					// this.renderable.angle = 1.6;
-				// }
-				// if (this.pos.y <= this.startY) {
-					// this.body.vel.x -= this.body.accel.x * me.timer.tick;
-					// this.renderable.angle = 4.7;
-				// }
-			// }
-		// }
+		if (andarBaixo) {
+			this.body.vel.y += this.body.accel.y * me.timer.tick;
+			this.renderable.angle = (180 * (Math.PI/180));
+		}
+		else {
+			if (!andarCima) this.body.vel.y = 0;
+		}
 		
 		me.collision.check(this, true, this.collideHandler.bind(this), true);
 		
