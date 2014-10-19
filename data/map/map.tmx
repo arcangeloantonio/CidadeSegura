@@ -103,6 +103,14 @@
     <property name="spritewidth" value="32"/>
    </properties>
   </object>
+  <object name="VelocityEntity" x="192" y="448" width="32" height="320">
+   <properties>
+    <property name="image" value="faixa_onibus_vertical"/>
+    <property name="spriteheight" value="320"/>
+    <property name="spritewidth" value="32"/>
+    <property name="velocidadeMaxima" value="40"/>
+   </properties>
+  </object>
  </objectgroup>
  <layer name="collision" width="34" height="34">
   <data encoding="base64">

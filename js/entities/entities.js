@@ -146,20 +146,20 @@ game.TrafficLightEntity = me.Entity.extend(
 		me.collision.check(this, true, this.collideHandler.bind(this), true);
 	},
 	collideHandler : function (response) {
- 			if (response.b.name == 'mainplayer') {
-				if (this.tempo == 0) this.tempo = me.timer.getTime()+1000;
-				if (this.renderable.isCurrentAnimation('red')) {
-					if (me.timer.getTime() <= this.tempo && !this.pontuou) {
-						game.data.money -= 191.54;
-						game.data.score += 7;
-						this.pontuou = true;
-					}
-					else if (me.timer.getTime() > this.tempo) {
-						this.pontuou = false;
-						this.tempo = 0;
-					}
+		if (response.b.name == 'mainplayer') {
+			if (this.tempo == 0) this.tempo = me.timer.getTime()+1000;
+			if (this.renderable.isCurrentAnimation('red')) {
+				if (me.timer.getTime() <= this.tempo && !this.pontuou) {
+					game.data.money -= 191.54;
+					game.data.score += 7;
+					this.pontuou = true;
+				}
+				else if (me.timer.getTime() > this.tempo) {
+					this.pontuou = false;
+					this.tempo = 0;
 				}
 			}
+		}
 	}
 });
 
@@ -620,31 +620,47 @@ game.StopEntity = me.Entity.extend(
 	}
 });
 
-// game.VelocityEntity = me.Entity.extend(
-// {
-	// init:function (x, y, settings)
-	// {
-		// this._super(me.Entity, 'init', [x, y , settings]);
-	// },
-	// update: function() {
-		// me.collision.check(this, true, this.collideHandler.bind(this), true);
-	// },
-	// collideHandler : function (response) {
-		 // if (response.b.name == 'mainplayer') {
-			 // if (this.tempo == 0) this.tempo = me.timer.getTime()+4000;
-				// if (me.timer.getTime() >= this.tempo) {
-					// var velocidade = Math.abs((Math.round(response.b.speed * 10)/10) * 10);
-					// //if (20%) {}
-					// //game.data.score += 4;
-					// //game.data.money -= 86,13;
-					// //if (50%) {}
-					// //game.data.score += 7;
-					// //game.data.money -= 574,60;
-				// this.tempo = 0;
-			// // }
-		// // }
-	// }
-// });
+game.VelocityEntity = me.Entity.extend(
+{
+	init:function (x, y, settings)
+	{
+		this._super(me.Entity, 'init', [x, y , settings]);
+		this.velocidadeMaxima = settings.velocidadeMaxima;
+		this.velocidadeMaxima20 = this.velocidadeMaxima * 1.2;
+		this.velocidadeMaxima50 = this.velocidadeMaxima * 1.5;
+		this.tempo = 0;
+		this.pontuou = false;
+	},
+	update: function() {
+		me.collision.check(this, true, this.collideHandler.bind(this), true);
+	},	
+	collideHandler : function (response) {
+		if (response.b.name == 'mainplayer') {
+			 if (this.tempo == 0) this.tempo = me.timer.getTime()+1000;
+				if (me.timer.getTime() <= this.tempo && !this.pontuou) {
+					var velocidade = Math.abs((Math.round(response.b.speed * 10)/10) * 10);
+					if (velocidade > this.velocidadeMaxima && velocidade <= this.velocidadeMaxima20) {
+						game.data.score += 4;
+						game.data.money -= 85,13;
+						this.pontuou = true;
+					}
+					else if (velocidade > this.velocidadeMaxima20 && velocidade <= this.velocidadeMaxima50) {
+						game.data.score += 5;
+						game.data.money -= 127,69;
+						this.pontuou = true;
+					}
+					else if (velocidade > this.velocidadeMaxima50) {
+						game.data.score += 7;
+						game.data.money -= 574,72;
+					}
+				}
+			else if (me.timer.getTime() > this.tempo) {
+				this.pontuou = false;
+				this.tempo = 0;
+			}	
+		}
+	}
+});
 
 // game.OtherHandEntity = me.Entity.extend(
 // {

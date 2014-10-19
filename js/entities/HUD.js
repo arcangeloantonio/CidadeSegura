@@ -11,7 +11,7 @@ game.HUD.Container = me.Container.extend({
 		this.addChild(new game.HUD.ScoreItem(460, 570));
 		this.addChild(new game.HUD.Velocity(10, 550));
 		this.addChild(new game.HUD.Money(10,0));
-		this.addChild(new game.HUD.Time(550, 0));
+		//this.addChild(new game.HUD.Time(550, 0));
 	}
 });
 
@@ -50,7 +50,7 @@ game.HUD.Speak = me.Renderable.extend( {
 				context.strokeStyle = '#99C6E0';
 				context.stroke();
 				context.drawImage(me.loader.getImage("rosto"), 30, 455);
-				this.font = new me.Font("Burnstown", 30, '#99C6E0');
+				this.font = new me.Font("Trebuchet MS", 30, '#99C6E0');
 				this.font.draw(context, this.fala, 190, 500);
 			}
 			else {
@@ -89,8 +89,7 @@ game.HUD.ScoreItem = me.Renderable.extend( {
 	},
 	draw : function (ctx) {
 		var context = ctx.getContext();
-		this.font = new me.Font("Burnstown", 30, '#000000');
-		this.font.bold();
+		this.font = new me.Font("Trebuchet MS", 30, '#FFFF00');
 		this.font.draw(context, 'Pontos na carteira: ' + game.data.score + '/20', this.pos.x, this.pos.y);
 	}
 });
@@ -114,8 +113,7 @@ game.HUD.Velocity = me.Renderable.extend( {
 	},
 	draw : function (ctx) {
 		var context = ctx.getContext();
-		this.font = new me.Font("Burnstown", 50, '#000000');
-		this.font.bold();
+		this.font = new me.Font("Trebuchet MS", 30, '#FFFF00');
 		this.font.draw (context, this.velocidade, this.pos.x, this.pos.y);
 	}
 });
@@ -133,29 +131,27 @@ game.HUD.Money = me.Renderable.extend({
 	},
 	draw : function (ctx) {
 		var context = ctx.getContext();
-		this.font = new me.Font("Burnstown", 50, '#000000');
-		this.font.bold();
+		this.font = new me.Font("Trebuchet MS", 30, '#FFFF00');
 		this.font.draw(context, 'R$: ' + game.data.money.toFixed(2).replace('.', ','), this.pos.x, this.pos.y);		
 	}
 });
 
-game.HUD.Time = me.Renderable.extend( {	
-	init: function(x, y) {
-		this._super(me.Renderable, 'init', [x, y, 10, 10]); 
-		this.font = new me.BitmapFont("32x32_font", 32);
-		this.font.set("right");
-		this.floating = true;
-		this.initialTime = me.timer.getTime();
-	},
-	update : function () {
-		return true;
+// game.HUD.Time = me.Renderable.extend( {	
+	// init: function(x, y) {
+		// this._super(me.Renderable, 'init', [x, y, 10, 10]); 
+		// this.font = new me.BitmapFont("32x32_font", 32);
+		// this.font.set("right");
+		// this.floating = true;
+		// this.initialTime = me.timer.getTime();
+	// },
+	// update : function () {
+		// return true;
 		
-	},
-	draw : function (ctx) {
-		var context = ctx.getContext();
-		var tempo = Math.round((me.timer.getTime()-this.initialTime)/1000);	
-		this.font = new me.Font("Burnstown", 50, '#000000');
-		this.font.bold();
-		this.font.draw(context, 'Tempo: ' + tempo, this.pos.x, this.pos.y);
-	}
-});
+	// },
+	// draw : function (ctx) {
+		// var context = ctx.getContext();
+		// var tempo = Math.round((me.timer.getTime()-this.initialTime)/1000);	
+		// this.font = new me.Font("Trebuchet MS", 30, '#FFFF00');
+		// this.font.draw(context, 'Tempo: ' + tempo, this.pos.x, this.pos.y);
+	// }
+// });
