@@ -17,6 +17,7 @@ game.resources = [
 	{name: "money", type:"image", src: "data/img/sprite/money.png"},
 	{name: "car_points", type:"image", src: "data/img/sprite/points.png"},
 	{name: "light", type:"image", src: "data/img/sprite/light.png"},
+	{name: "40km", type:"image", src: "data/img/sprite/40km.png"},
 	
 	
 	//Tiles https://tinypng.com/
@@ -47,6 +48,6 @@ game.resources = [
 	{name: "car_accel", type: "audio", src: "data/sfx/"},
 	{name: "car_stop", type: "audio", src: "data/sfx/"},
 	{name: "change_menu", type: "audio", src: "data/sfx/"},
-	{name: "select_menu", type: "audio", src: "data/sfx/"}
-	//{name: "crash",  type: "audio", src: "data/sfx/"}
+	{name: "select_menu", type: "audio", src: "data/sfx/"},
+	{name: "crash",  type: "audio", src: "data/sfx/"}
 ];

@@ -513,9 +513,14 @@ game.EnemyEntity = me.Entity.extend({
 		this.body.setVelocity(4, 4);
 		this.parado = false;
 		this.direcao = settings.direcao === undefined ? "e" : settings.direcao;
+		this.tempoBatida = 0;
+		this.batido = false;
 	},
 	update : function (dt)
 	{
+		if (this.tempoBatida <= me.timer.getTime()) {
+			me.audio.stop("crash");
+		}
 		var yTopo = this.pos.y <= this.startY;
 		var yBaixo = this.pos.y >= this.endY;
 		
@@ -579,6 +584,7 @@ game.EnemyEntity = me.Entity.extend({
 		
 		if (this.body.vel.x!=0 ||this.body.vel.y!=0)
 		{
+			this.batido = false;
 			this._super(me.Entity, 'update', [dt]);
 			return true;
 		}
@@ -594,7 +600,11 @@ game.EnemyEntity = me.Entity.extend({
 			}
 		}
 		else if (response.b.name === "mainplayer") {
-			//me.audio.start("crash");
+			if (this.tempoBatida <= me.timer.getTime() || this.tempoBatida == 0 && !this.batido) {
+				me.audio.playTrack("crash", false, null, 0.1);
+				this.tempoBatida = me.timer.getTime() + 1000;
+				this.batido = true;
+			}	
 			game.data.alertaFala = true;
 			game.data.mensagemAlerta = 'Você bateu em outro carro!';
 			response.b.body.vel.x = 0;
@@ -650,6 +660,11 @@ game.VelocityEntity = me.Entity.extend({
 		this.velocidadeMaxima50 = this.velocidadeMaxima * 1.5;
 		this.tempo = 0;
 		this.pontuou = false;
+	},
+	draw: function(ctx) {
+		var context = ctx.getContext();
+		var carro = me.loader.getImage("40km"); 
+		context.drawImage(carro, this.pos.x, this.pos.y);
 	},
 	update: function() {
 		me.collision.check(this, true, this.collideHandler.bind(this), true);
