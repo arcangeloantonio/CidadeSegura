@@ -27,7 +27,7 @@ game.ConfigScreen = me.ScreenObject.extend({
 				context.stroke();
 				
 				var textoSom = game.data.somLigado ? "LIGADO" : "DESLIGADO";
-				this.desenharFonteCentro(context, "Configurações", 200, 50, '#000000');
+				this.desenharFonteCentro(context, "Configurações", 190, 50, '#000000');
 				this.desenharFonteCentro(context, "Som:    < " + textoSom +  " >", 300, 30, '#FF0000');
             },			
 			desenharFonteCentro: function(contexto, texto, y, tamanhoFonte, cor) {					

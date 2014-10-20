@@ -17,6 +17,8 @@ game.PlayerEntity = me.Entity.extend({
 		
 		game.data.alertaFala = true;
 		game.data.mensagemAlerta = 'Você precisa buscar o pedestre, siga a seta amarela!';
+		this.batido = false;
+		this.tempoBatido = 0;
 		
 	},
 	draw: function(ctx) {
@@ -28,7 +30,14 @@ game.PlayerEntity = me.Entity.extend({
 		context.save();
 		context.translate(this.pos.x+16, this.pos.y+16);
 		context.rotate(this.angle);
-		context.drawImage(carro,-carro.width/2,-carro.width/2);
+		
+		if (this.batido) {
+			context.drawImage(carro, 32, 0, 32 , 64, -carro.width/2,-carro.width/2, 32,64);
+		}
+		else {
+			context.drawImage(carro, 0, 0, 32 , 64, -carro.width/2,-carro.width/2, 32,64);
+		}
+		
 		context.restore();
 		
 		var seta = me.loader.getImage("arrow"); 
@@ -48,6 +57,10 @@ game.PlayerEntity = me.Entity.extend({
 	},
 	update : function (dt)
 	{
+		if (this.batido && this.tempoBatido <= me.timer.getTime()) {
+			this.batido = false;
+		}
+		
 		if (me.input.keyStatus('up') != true) {
 			me.audio.stop("car_accel");
 			this.tempoAcelerando = 0;
@@ -113,9 +126,27 @@ game.PlayerEntity = me.Entity.extend({
 
 game.TrafficLightEntity = me.Entity.extend({
 	init:function (x, y, settings)
-	{
-		this._super(me.Entity, 'init', [x, y , settings]);
+	{	
+		this._super(me.Entity, 'init', [settings.x, y , settings]);
 
+		if (settings.direcaosprite == 'e') {
+			this.renderable.pos.x =  - (settings.width/2 - settings.spritewidth/2);
+		}
+		
+		if (settings.direcaosprite == 'd') {
+			this.renderable.pos.x = (settings.width/2 - settings.spritewidth/2);
+		}
+		
+		if (settings.direcaosprite == 'c') {
+			this.renderable.angle = (90 * (Math.PI/180));
+			this.renderable.pos.y =  - (settings.height/2 - settings.spriteheight/4);
+		}
+		
+		if (settings.direcaosprite == 'b') {
+			this.renderable.angle = (90 * (Math.PI/180));
+			this.renderable.pos.y =  (settings.height/2 - settings.spriteheight/4);
+		}
+		
 		this.tempoInicial = me.timer.getTime();
 
         this.renderable.addAnimation("red", [0]);
@@ -126,8 +157,7 @@ game.TrafficLightEntity = me.Entity.extend({
 		this.renderable.setCurrentAnimation("red", function(){self.renderable.setCurrentAnimation("red"); self.status = "OK";})
 		this.alwaysUpdate = true;
 		
-		this.tempoMudaFarol = Math.floor((Math.random() * 5)+3);
-		
+		this.tempoMudaFarol = Math.floor((Math.random() * 5)+3);		
 		
 		this.tempo = 0;
 		this.pontuou = false;
@@ -514,7 +544,6 @@ game.EnemyEntity = me.Entity.extend({
 		this.parado = false;
 		this.direcao = settings.direcao === undefined ? "e" : settings.direcao;
 		this.tempoBatida = 0;
-		this.batido = false;
 	},
 	update : function (dt)
 	{
@@ -584,10 +613,10 @@ game.EnemyEntity = me.Entity.extend({
 		
 		if (this.body.vel.x!=0 ||this.body.vel.y!=0)
 		{
-			this.batido = false;
 			this._super(me.Entity, 'update', [dt]);
 			return true;
 		}
+		
 		return false;
 	},
 	collideHandler: function(response) {
@@ -600,17 +629,24 @@ game.EnemyEntity = me.Entity.extend({
 			}
 		}
 		else if (response.b.name === "mainplayer") {
-			if (this.tempoBatida <= me.timer.getTime() || this.tempoBatida == 0 && !this.batido) {
-				me.audio.playTrack("crash", false, null, 0.1);
-				this.tempoBatida = me.timer.getTime() + 1000;
-				this.batido = true;
-			}	
+			if (response.b.speed > 0) {
+				if (this.tempoBatida <= me.timer.getTime() || this.tempoBatida == 0) {
+					me.audio.playTrack("crash", false, null, 0.1);
+					this.tempoBatida = me.timer.getTime() + 1000;
+					game.data.money -= 100;
+				}
+			}
 			game.data.alertaFala = true;
 			game.data.mensagemAlerta = 'Você bateu em outro carro!';
+			game.data.subalerta = 'Você perdeu R$100,00';
 			response.b.body.vel.x = 0;
 			response.b.body.vel.y = 0;
 			response.b.body.accel.x = 0;
 			response.b.body.accel.y = 0;
+			
+			response.b.batido = true;
+			response.b.tempoBatido = me.timer.getTime()+10000;
+			
 			this.body.setVelocity(0, 0);
 			if (!me.input.isKeyPressed("down")) {
 				response.b.speed = 0;				

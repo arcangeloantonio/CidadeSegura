@@ -25,9 +25,9 @@ game.HelpScreen = me.ScreenObject.extend({
 				context.lineWidth = 7;
 				context.strokeStyle = '#A2C969';
 				context.stroke();
-				this.desenharFonteCentro(context, "Ajuda", 200, 50, '#000000');
+				this.desenharFonteCentro(context, "Ajuda", 190, 50, '#000000');
 				
-				var texto = "O objetivo do jogo é levar os passageiros ao destino(seguindo a seta amarela em volta do carro) sem cometer infrações. Você pode controlar o seu carro usando as setas";
+				var texto = "Você é um taxista porto-riquenho, seu objetivo é levar os passageiros ao destino, para isso você deve controlar o taxi com as setas e respeitar as leis de trânsito.";
 				this.wrapText(context, texto, 120, 260, 580, 30)
             },		
 			wrapText: function(context, text, x, y, maxWidth, lineHeight) {

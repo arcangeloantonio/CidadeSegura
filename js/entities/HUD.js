@@ -46,7 +46,8 @@ game.HUD.Alert = me.Renderable.extend( {
 		this.text = texto;
 		this.font = new me.Font("Trebuchet MS", tamanhoFonte, cor);
 		var measureTitle = this.font.measureText(contexto, this.text);
-		this.font.draw(contexto, this.text, me.game.viewport.width/2 - measureTitle.width/2, y);	
+		this.font.draw(contexto, this.text, me.game.viewport.width/2 - measureTitle.width/2, y);
+		this.font.drawStroke(contexto, this.text, me.game.viewport.width/2 - measureTitle.width/2, y);
 	}
 });
 
@@ -87,6 +88,7 @@ game.HUD.Speak = me.Renderable.extend( {
 				context.drawImage(me.loader.getImage("rosto"), 30, 455);
 				this.font = new me.Font("Trebuchet MS", 30, '#99C6E0');
 				this.font.draw(context, this.fala, 190, 500);
+				this.font.drawStroke(context, this.fala, 190, 500);
 			}
 			else {
 				this.tempo = 0;
@@ -127,6 +129,7 @@ game.HUD.ScoreItem = me.Renderable.extend( {
 		var context = ctx.getContext();
 		this.font = new me.Font("Trebuchet MS", 30, '#FFFF00');
 		this.font.draw(context, game.data.score + '/20', this.pos.x+64, this.pos.y);
+		this.font.drawStroke(context, game.data.score + '/20', this.pos.x+64, this.pos.y);
 		if (game.data.score >= 16) {
 			context.drawImage(me.loader.getImage("car_points"), 0, 64, 64 , 32, this.pos.x,this.pos.y, 64,32);
 		}
@@ -159,7 +162,8 @@ game.HUD.Velocity = me.Renderable.extend( {
 	draw : function (ctx) {
 		var context = ctx.getContext();
 		this.font = new me.Font("Trebuchet MS", 30, '#FFFF00');
-		this.font.draw (context, this.velocidade, this.pos.x, this.pos.y);
+		this.font.draw(context, this.velocidade, this.pos.x, this.pos.y);
+		this.font.drawStroke(context, this.velocidade, this.pos.x, this.pos.y);
 	}
 });
 
@@ -178,7 +182,9 @@ game.HUD.Money = me.Renderable.extend({
 	draw : function (ctx) {
 		var context = ctx.getContext();		
 		this.font = new me.Font("Trebuchet MS", 30, '#FFFF00');
-		this.font.draw(context, 'R$' + game.data.money.toFixed(2).replace('.', ','), this.pos.x+64, this.pos.y);		
+		this.font.draw(context, 'R$' + game.data.money.toFixed(2).replace('.', ','), this.pos.x+64, this.pos.y);
+		this.font.drawStroke(context, 'R$' + game.data.money.toFixed(2).replace('.', ','), this.pos.x+64, this.pos.y);
+		
 		if (game.data.money >= 500) {
 			context.drawImage(me.loader.getImage("money"), 0, 0, 64 , 32, this.pos.x,this.pos.y, 64,32);
 		}

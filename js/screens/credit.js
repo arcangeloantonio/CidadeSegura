@@ -25,7 +25,7 @@ game.CreditScreen = me.ScreenObject.extend({
 				context.lineWidth = 7;
 				context.strokeStyle = '#A2C969';
 				context.stroke();
-				this.desenharFonteCentro(context, "Créditos", 200, 50, '#000000');
+				this.desenharFonteCentro(context, "Créditos", 190, 50, '#000000');
 				this.desenharFonteCentro(context, "Programador: Antonio Ruggiero Arcangelo", 300, 30, '#000000');
 				this.desenharFonteCentro(context, "Designer: Diego Fernandes Resende", 350, 30, '#000000');
             },			

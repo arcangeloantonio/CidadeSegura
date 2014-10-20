@@ -34,9 +34,6 @@ game.resources = [
 	{name: "title_screen",        type:"image",	src: "data/img/gui/title_screen.png"},
 	{name: "game_over",        type:"image",	src: "data/img/gui/game_over.png"},
 	
-	// Fonte
-	{name: "32x32_font",          type:"image",	src: "data/img/font/32x32_font.png"},
-	
 	//Mapa
 	{name: "map", type: "tmx", src: "data/map/map.tmx"},
 	{name: "map_novo", type: "tmx", src: "data/map/map_novo.tmx"},
