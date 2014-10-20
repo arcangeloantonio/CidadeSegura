@@ -20,11 +20,12 @@ game.GameOver = me.ScreenObject.extend({
             },
             draw : function (ctx) {
 				var context = ctx.getContext();
-				this.desenharFonteCentro(context, "Você perdeu! :(", 50, 50, "#FF0000");
-            },			
+				this.desenharFonteCentro(context, "Fim de jogo!", 50, 50, "#FF0000");
+				this.desenharFonteCentro(context, game.data.gameovermessage, 120, 30, "#FF0000");
+            },
 			desenharFonteCentro: function(contexto, texto, y, tamanhoFonte, cor) {					
 				this.text = texto;
-				this.font = new me.Font("Burnstown", tamanhoFonte, cor);
+				this.font = new me.Font("Trebuchet MS", tamanhoFonte, cor);
 				var measureTitle = this.font.measureText(contexto, this.text);
 				this.font.draw(contexto, this.text, me.game.viewport.width/2 - measureTitle.width/2, y);	
 			}
@@ -34,6 +35,13 @@ game.GameOver = me.ScreenObject.extend({
 		me.input.bindKey(me.input.KEY.ESC, "esc", true);
         this.handler = me.event.subscribe(me.event.KEYDOWN, function (action, keyCode, edge) {
             if (action === "enter" || action === "esc") {
+				game.data.score = 0;
+				game.data.balaoFala = 0;
+				game.data.money  = 300;
+				game.data.gameovermessage = '';
+				game.data.alertaFala = false;
+				game.data.mensagemAlerta = '';
+				game.data.subalerta = '';
 				me.state.change(me.state.MENU);
 			}
         });

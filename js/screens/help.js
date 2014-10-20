@@ -35,18 +35,18 @@ game.HelpScreen = me.ScreenObject.extend({
 				var line = '';
 		
 				for(var n = 0; n < words.length; n++) {
-				var testLine = line + words[n] + ' ';
-				var metrics = context.measureText(testLine);
-				var testWidth = metrics.width;
-				if (testWidth > maxWidth && n > 0) {
-					context.font="30px Burnstown";
-					context.fillText(line, x, y);
-					line = words[n] + ' ';
-					y += lineHeight;
-				}
-				else {
-					line = testLine;
-				}
+					var testLine = line + words[n] + ' ';
+					var metrics = context.measureText(testLine);
+					var testWidth = metrics.width;
+					if (testWidth > maxWidth && n > 0) {
+						context.font="30px Burnstown";
+						context.fillText(line, x, y);
+						line = words[n] + ' ';
+						y += lineHeight;
+					}
+					else {
+						line = testLine;
+					}
 				}
 				context.font="30px Burnstown";
 				context.fillText(line, x, y);

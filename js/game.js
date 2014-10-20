@@ -5,7 +5,11 @@ var game = {
 		posicaoMenu: 1,
 		balaoFala: 0,
 		money: 300,
-		somLigado: true
+		somLigado: true,
+		gameovermessage: '',
+		alertaFala: false,
+		mensagemAlerta: '',
+		subalerta: ''
 	},
     "onload" : function () {
         if (!me.video.init("screen", me.video.CANVAS, 800, 600, true, 'auto')) {

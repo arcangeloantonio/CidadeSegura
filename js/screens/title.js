@@ -1,5 +1,6 @@
 game.TitleScreen = me.ScreenObject.extend({
     onResetEvent : function() {
+		me.audio.stop("afro_american");
 		me.audio.playTrack("afro_american");
 		me.audio.stop("latin_flute");
 		me.audio.stop("car_accel");

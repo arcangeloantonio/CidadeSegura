@@ -14,6 +14,10 @@ game.resources = [
 	{name: "faixa_onibus_horizontal",     type:"image",	src: "data/img/sprite/faixa_onibus_horizontal.png"},
 	{name: "stop", type:"image", src: "data/img/sprite/stop.png"},	
 	{name: "rosto", type:"image", src: "data/img/sprite/rosto.png"},
+	{name: "money", type:"image", src: "data/img/sprite/money.png"},
+	{name: "car_points", type:"image", src: "data/img/sprite/points.png"},
+	{name: "light", type:"image", src: "data/img/sprite/light.png"},
+	
 	
 	//Tiles https://tinypng.com/
 	{name: "tiles", type:"image", src: "data/img/map/tiles.png"},
@@ -43,6 +47,6 @@ game.resources = [
 	{name: "car_accel", type: "audio", src: "data/sfx/"},
 	{name: "car_stop", type: "audio", src: "data/sfx/"},
 	{name: "change_menu", type: "audio", src: "data/sfx/"},
-	{name: "select_menu", type: "audio", src: "data/sfx/"},
-	// {name: "jump",  type: "audio", src: "data/sfx/"}
+	{name: "select_menu", type: "audio", src: "data/sfx/"}
+	//{name: "crash",  type: "audio", src: "data/sfx/"}
 ];
