@@ -2,7 +2,7 @@ game.PlayerEntity = me.Entity.extend({
 	init:function (x, y, settings)
 	{
 		settings.width = 32;
-		settings.height = 32;
+		settings.height = 64;
 		
 		this.angle = 0;
 		this._super(me.Entity, 'init', [x, y , settings]);
@@ -28,7 +28,7 @@ game.PlayerEntity = me.Entity.extend({
 		var raio = 48;
 		
 		context.save();
-		context.translate(this.pos.x+16, this.pos.y+16);
+		context.translate(this.pos.x+16, this.pos.y+32);
 		context.rotate(this.angle);
 		
 		if (this.batido) {
