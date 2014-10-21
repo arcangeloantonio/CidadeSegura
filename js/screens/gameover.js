@@ -7,7 +7,7 @@ game.GameOver = me.ScreenObject.extend({
         me.game.world.addChild(
             new me.Sprite(
                 0,0, 
-                me.loader.getImage('game_over')
+                me.loader.getImage(game.data.gameoverscreen)
             ),
             1
         );

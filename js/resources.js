@@ -30,6 +30,9 @@ game.resources = [
 	// Inicio
 	{name: "title_screen",        type:"image",	src: "data/img/gui/title_screen.png"},
 	{name: "game_over",        type:"image",	src: "data/img/gui/game_over.png"},
+	{name: "game_over_money",        type:"image",	src: "data/img/gui/game_over_money.png"},
+	{name: "game_over_pedestrian",        type:"image",	src: "data/img/gui/game_over_pedestrian.png"},
+	{name: "game_over_points",        type:"image",	src: "data/img/gui/game_over_points.png"},
 	
 	//Mapa
 	{name: "map", type: "tmx", src: "data/map/map.tmx"},

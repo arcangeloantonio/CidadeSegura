@@ -509,6 +509,7 @@ game.PedestrianEntity  = me.Entity.extend({
 		}
 		else if (response.b.name == 'mainplayer') {
 			game.data.gameovermessage = 'Você atropelou um pedestre! :(';
+			game.data.gameoverscreen = 'game_over_pedestrian';
 			me.state.change(me.state.GAMEOVER);
 		}
 	}

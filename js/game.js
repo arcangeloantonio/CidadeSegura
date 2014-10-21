@@ -9,7 +9,8 @@ var game = {
 		gameovermessage: '',
 		alertaFala: false,
 		mensagemAlerta: '',
-		subalerta: ''
+		subalerta: '',
+		gameoverscreen: ''
 	},
     "onload" : function () {
         if (!me.video.init("screen", me.video.CANVAS, 800, 600, true, 'auto')) {
