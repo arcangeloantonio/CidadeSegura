@@ -252,11 +252,16 @@ game.BusRoadEntity = me.Entity.extend({
 	init:function (x, y, settings)
 	{
 		this._super(me.Entity, 'init', [x, y , settings]);
+		
+		if (settings.direcaosprite == 'h') {
+			this.renderable.angle = (270 * (Math.PI/180));
+		}
+		
 		this.alwaysUpdate = true;
 		this.tempo = 0;
 	},
 	update: function() {
-		this.z = 6;
+		this.z = 99;
 		me.collision.check(this, true, this.collideHandler.bind(this), true);
 	},
 	collideHandler : function (response) {
