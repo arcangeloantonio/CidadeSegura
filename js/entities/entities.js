@@ -204,6 +204,26 @@ game.PedestrianLightEntity = me.Entity.extend({
 	init:function (x, y, settings)
 	{
 		this._super(me.Entity, 'init', [x, y , settings]);
+		
+		if (settings.direcaosprite == 'e') {
+			this.renderable.pos.x =  - (settings.width/2 - settings.spritewidth/2);
+		}
+		
+		if (settings.direcaosprite == 'd') {
+			this.renderable.pos.x = (settings.width/2 - settings.spritewidth/2);
+		}
+		
+		if (settings.direcaosprite == 'c') {
+			this.renderable.angle = (90 * (Math.PI/180));
+			this.renderable.pos.y =  - (settings.height/2 - settings.spriteheight/2);
+		}
+		
+		if (settings.direcaosprite == 'b') {
+			this.renderable.angle = (90 * (Math.PI/180));
+			this.renderable.pos.y =  (settings.height/2 - settings.spriteheight/2);
+		}
+		
+		
         this.renderable.addAnimation("red", [0]);
 		this.renderable.addAnimation("green", [1]);
 
@@ -489,6 +509,7 @@ game.PedestrianEntity  = me.Entity.extend({
 		}
 		else if (response.b.name == 'mainplayer') {
 			game.data.gameovermessage = 'Você atropelou um pedestre! :(';
+			game.data.gameoverscreen = 'game_over_pedestrian';
 			me.state.change(me.state.GAMEOVER);
 		}
 	}

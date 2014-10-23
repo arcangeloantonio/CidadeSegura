@@ -3,10 +3,7 @@ game.resources = [
 	{name: "player", type:"image", src: "data/img/sprite/player.png"},
 	{name: "car",     type:"image",	src: "data/img/sprite/car.png"},
 	{name: "car2",     type:"image",	src: "data/img/sprite/car2.png"},
-	{name: "lights_horizontal",  type:"image", src: "data/img/sprite/lights_horizontal.png"},
-	{name: "lights_vertical",  type:"image", src: "data/img/sprite/lights_vertical.png"},
-	{name: "pedestrian_lights_horizontal",  type:"image", src: "data/img/sprite/pedestrian_lights_horizontal.png"},
-	{name: "pedestrian_lights_vertical",  type:"image", src: "data/img/sprite/pedestrian_lights_vertical.png"},
+	{name: "pedestrian_lights",  type:"image", src: "data/img/sprite/pedestrian_lights.png"},
 	{name: "arrow",  type:"image", src: "data/img/sprite/arrow.png"},
 	{name: "passager",  type:"image", src: "data/img/sprite/passager.png"},
 	{name: "pedestrian",     type:"image",	src: "data/img/sprite/pedestrian.png"},
@@ -16,7 +13,7 @@ game.resources = [
 	{name: "rosto", type:"image", src: "data/img/sprite/rosto.png"},
 	{name: "money", type:"image", src: "data/img/sprite/money.png"},
 	{name: "car_points", type:"image", src: "data/img/sprite/points.png"},
-	{name: "light", type:"image", src: "data/img/sprite/light.png"},
+	{name: "lights", type:"image", src: "data/img/sprite/lights.png"},
 	{name: "40km", type:"image", src: "data/img/sprite/40km.png"},
 	
 	
@@ -29,14 +26,18 @@ game.resources = [
 	{name: "sidewalk", type:"image", src: "data/img/map/sidewalk.png"},	
 	{name: "university", type:"image", src: "data/img/map/university.png"},	
 	{name: "metatiles32x32",  	  type:"image", src: "data/img/map/metatiles32x32.png"},
+	{name: "road_tiles",  	  type:"image", src: "data/img/map/road_tiles.png"},
 	
 	// Inicio
 	{name: "title_screen",        type:"image",	src: "data/img/gui/title_screen.png"},
 	{name: "game_over",        type:"image",	src: "data/img/gui/game_over.png"},
+	{name: "game_over_money",        type:"image",	src: "data/img/gui/game_over_money.png"},
+	{name: "game_over_pedestrian",        type:"image",	src: "data/img/gui/game_over_pedestrian.png"},
+	{name: "game_over_points",        type:"image",	src: "data/img/gui/game_over_points.png"},
 	
 	//Mapa
 	{name: "map", type: "tmx", src: "data/map/map.tmx"},
-	{name: "map_novo", type: "tmx", src: "data/map/map_novo.tmx"},
+	
 	
 	//Sons
 	{name: "afro_american", type: "audio", src: "data/bgm/"},

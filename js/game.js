@@ -9,7 +9,8 @@ var game = {
 		gameovermessage: '',
 		alertaFala: false,
 		mensagemAlerta: '',
-		subalerta: ''
+		subalerta: '',
+		gameoverscreen: ''
 	},
     "onload" : function () {
         if (!me.video.init("screen", me.video.CANVAS, 800, 600, true, 'auto')) {
@@ -37,13 +38,13 @@ var game = {
 		
 		me.pool.register("mainPlayer", game.PlayerEntity, 99);
 		me.pool.register("TrafficLightEntity", game.TrafficLightEntity);
-		me.pool.register("BusRoadEntity", game.BusRoadEntity);
-		me.pool.register("PassagerEntity", game.PassagerEntity);
-		me.pool.register("PedestrianEntity", game.PedestrianEntity);
+		// me.pool.register("BusRoadEntity", game.BusRoadEntity);
+		 me.pool.register("PassagerEntity", game.PassagerEntity);
+		// me.pool.register("PedestrianEntity", game.PedestrianEntity);
 		me.pool.register("EnemyEntity", game.EnemyEntity);
-		me.pool.register("PedestrianLightEntity", game.PedestrianLightEntity);
-		me.pool.register("StopEntity", game.StopEntity);
-		me.pool.register("VelocityEntity", game.VelocityEntity);
+		// me.pool.register("PedestrianLightEntity", game.PedestrianLightEntity);
+		// me.pool.register("StopEntity", game.StopEntity);
+		// me.pool.register("VelocityEntity", game.VelocityEntity);
 
 		me.input.bindKey(me.input.KEY.UP, "up");
 		me.input.bindKey(me.input.KEY.LEFT,	"left");

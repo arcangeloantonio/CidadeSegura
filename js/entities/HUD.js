@@ -121,6 +121,7 @@ game.HUD.ScoreItem = me.Renderable.extend( {
 		
 		if (game.data.score > 19) {
 			game.data.gameovermessage = 'Você ficou com muitos pontos na carteira! :(';
+			game.data.gameoverscreen = 'game_over_points';
 			me.state.change(me.state.GAMEOVER);
 		}
 		return false;
@@ -175,6 +176,7 @@ game.HUD.Money = me.Renderable.extend({
 	update : function () {
 		if (game.data.money < 0) {
 			game.data.gameovermessage = 'Seu dinheiro acabou! :(';
+			game.data.gameoverscreen = 'game_over_money';
 			me.state.change(me.state.GAMEOVER);
 		}
 		return true;
