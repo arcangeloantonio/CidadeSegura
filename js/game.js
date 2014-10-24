@@ -37,11 +37,11 @@ var game = {
 		me.state.set(me.state.GAMEOVER, new game.GameOver());
 		
 		me.pool.register("mainPlayer", game.PlayerEntity, 99);
-		//me.pool.register("TrafficLightEntity", game.TrafficLightEntity);
+		me.pool.register("TrafficLightEntity", game.TrafficLightEntity);
 		me.pool.register("BusRoadEntity", game.BusRoadEntity);
 		me.pool.register("PassagerEntity", game.PassagerEntity);
 		// me.pool.register("PedestrianEntity", game.PedestrianEntity);
-		me.pool.register("EnemyEntity", game.EnemyEntity);
+		me.pool.register("EnemyEntity", game.EnemyEntity, 99);
 		// me.pool.register("PedestrianLightEntity", game.PedestrianLightEntity);
 		me.pool.register("StopEntity", game.StopEntity);
 		//me.pool.register("VelocityEntity", game.VelocityEntity);

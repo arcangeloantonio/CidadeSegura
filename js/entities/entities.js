@@ -1,8 +1,8 @@
 game.PlayerEntity = me.Entity.extend({
 	init:function (x, y, settings)
 	{
-		settings.width = 32;
-		settings.height = 64;
+		settings.width = 16;
+		settings.height = 32;
 		
 		this.angle = 0;
 		this._super(me.Entity, 'init', [x, y , settings]);
@@ -104,7 +104,7 @@ game.PlayerEntity = me.Entity.extend({
 		this.body.vel.y = -Math.cos(this.angle) * this.speed;
 		this.atrito(.001);
 		
-		this.renderable.angle = this.angle - (270 * (Math.PI/180));
+		this.renderable.angle = this.angle;
 		this.body.update(dt);
 
 		 if (this.body.vel.x!=0 || this.body.vel.y!=0 && !this.colidiu)
@@ -147,6 +147,7 @@ game.TrafficLightEntity = me.Entity.extend({
 			this.renderable.pos.y =  (settings.height/2 - settings.spriteheight/4);
 		}
 		
+		
 		this.tempoInicial = me.timer.getTime();
 
         this.renderable.addAnimation("red", [0]);
@@ -161,23 +162,36 @@ game.TrafficLightEntity = me.Entity.extend({
 		
 		this.tempo = 0;
 		this.pontuou = false;
+		this.passivo = (settings.passivo === 's');
 	},
 	update : function ()
 	{
-		this.tempoAtual = me.timer.getTime();
-		if (this.tempoAtual - this.tempoInicial >= (this.tempoMudaFarol*1000)) {
-			this.tempoInicial = this.tempoAtual;
-			if (this.renderable.isCurrentAnimation("green")) {
+		if (!this.passivo) {
+			this.tempoAtual = me.timer.getTime();
+			if (this.tempoAtual - this.tempoInicial >= (this.tempoMudaFarol*1000)) {
+				this.tempoInicial = this.tempoAtual;
+				if (this.renderable.isCurrentAnimation("green")) {
+					this.renderable.setCurrentAnimation("red", function(){this.renderable.setCurrentAnimation("red"); this.status = "OK";});
+				}
+				else {
+					this.renderable.setCurrentAnimation("green", function(){this.renderable.setCurrentAnimation("green"); this.status = "OK";});
+				}
+			}
+		}
+		if (!(me.collision.check(this, true, this.collideHandler.bind(this), true))) {
+			this.tempo = 0;
+		}
+	},
+	collideHandler : function (response) {
+		if (response.b.name == 'trafficlightentity' && this.passivo) {
+			if (response.b.renderable.isCurrentAnimation("green")) {
 				this.renderable.setCurrentAnimation("red", function(){this.renderable.setCurrentAnimation("red"); this.status = "OK";});
 			}
 			else {
 				this.renderable.setCurrentAnimation("green", function(){this.renderable.setCurrentAnimation("green"); this.status = "OK";});
 			}
 		}
-		me.collision.check(this, true, this.collideHandler.bind(this), true);
-	},
-	collideHandler : function (response) {
-		if (response.b.name == 'mainplayer') {
+		else if (response.b.name == 'mainplayer') {
 			if (this.tempo == 0) this.tempo = me.timer.getTime()+1000;
 			if (this.renderable.isCurrentAnimation('red')) {
 				if (me.timer.getTime() <= this.tempo && !this.pontuou) {
@@ -261,8 +275,9 @@ game.BusRoadEntity = me.Entity.extend({
 		this.tempo = 0;
 	},
 	update: function() {
-		this.z = 99;
-		me.collision.check(this, true, this.collideHandler.bind(this), true);
+		if (!(me.collision.check(this, true, this.collideHandler.bind(this), true))) {
+			this.tempo = 0;
+		}
 	},
 	collideHandler : function (response) {
 		if (response.b.name == 'mainplayer') {
@@ -693,7 +708,9 @@ game.StopEntity = me.Entity.extend({
 		this.tempo = 0;
 	},
 	update: function() {
-		me.collision.check(this, true, this.collideHandler.bind(this), true);
+		if (!(me.collision.check(this, true, this.collideHandler.bind(this), true))) {
+			this.tempo = 0;
+		}
 	},
 	collideHandler : function (response) {
 		if (response.b.name == 'mainplayer') {
@@ -729,7 +746,9 @@ game.VelocityEntity = me.Entity.extend({
 		context.drawImage(carro, this.pos.x, this.pos.y);
 	},
 	update: function() {
-		me.collision.check(this, true, this.collideHandler.bind(this), true);
+		if (!(me.collision.check(this, true, this.collideHandler.bind(this), true))) {
+			this.tempo = 0;
+		}
 	},	
 	collideHandler : function (response) {
 		if (response.b.name == 'mainplayer') {

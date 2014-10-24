@@ -26,6 +26,7 @@ game.resources = [
 	{name: "university", type:"image", src: "data/img/map/university.png"},	
 	{name: "metatiles32x32",  	  type:"image", src: "data/img/map/metatiles32x32.png"},
 	{name: "road_tiles",  	  type:"image", src: "data/img/map/road_tiles.png"},
+	{name: "setas", type:"image", src: "data/img/map/setas.png"},
 	
 	// Inicio
 	{name: "title_screen",        type:"image",	src: "data/img/gui/title_screen.png"},

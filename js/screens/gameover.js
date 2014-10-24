@@ -4,6 +4,7 @@ game.GameOver = me.ScreenObject.extend({
 		me.audio.stop("latin_flute");
 		me.audio.stop("car_accel");
 		me.audio.stop("car_stop");
+		me.audio.stop("crash");
         me.game.world.addChild(
             new me.Sprite(
                 0,0, 
@@ -20,14 +21,36 @@ game.GameOver = me.ScreenObject.extend({
             },
             draw : function (ctx) {
 				var context = ctx.getContext();
-				this.desenharFonteCentro(context, "Fim de jogo!", 50, 50, "#FF0000");
-				this.desenharFonteCentro(context, game.data.gameovermessage, 120, 30, "#FF0000");
+				var textoFim = "Fim de jogo!";
+				if (game.data.gameoverscreen == 'game_over_money') {
+					this.font = new me.Font("Trebuchet MS", 50, '#FF0000');
+					this.font.draw(context, textoFim, 400, 370);
+					this.font = new me.Font("Trebuchet MS", 30, '#FF0000');
+					this.font.draw(context, game.data.gameovermessage, 380, 430);
+				}
+				else if (game.data.gameoverscreen == 'game_over_points') {
+					this.desenharFonteCentro(context, textoFim, 250, 50, "#FFFF00", true);
+					this.desenharFonteCentro(context, game.data.gameovermessage, 300, 30, "#FFFF00", true);
+				}
+				else if (game.data.gameoverscreen == 'game_over_pedestrian') {
+					this.desenharFonteCentro(context, "Fim de jogo!", 20, 50, "#FFFF00", true);
+					this.desenharFonteCentro(context, 'Você atropelou um pedestre! :(', 90, 30, "#FFFF00", true);
+				}
+				else {
+					this.desenharFonteCentro(context, "Fim de jogo!", 50, 50, "#FF0000");
+					this.desenharFonteCentro(context, game.data.gameovermessage, 120, 30, "#FF0000");
+				}
             },
-			desenharFonteCentro: function(contexto, texto, y, tamanhoFonte, cor) {					
+			desenharFonteCentro: function(contexto, texto, y, tamanhoFonte, cor, borda) {					
 				this.text = texto;
 				this.font = new me.Font("Trebuchet MS", tamanhoFonte, cor);
 				var measureTitle = this.font.measureText(contexto, this.text);
-				this.font.draw(contexto, this.text, me.game.viewport.width/2 - measureTitle.width/2, y);	
+				var centerWidth = me.game.viewport.width/2 - measureTitle.width/2;
+				this.font.draw(contexto, this.text, centerWidth, y);
+				if (borda !== undefined && borda) {
+					this.font.lineWidth = 3;
+					this.font.drawStroke(contexto, this.text, centerWidth, y);
+				}
 			}
         })), 2);
 		
