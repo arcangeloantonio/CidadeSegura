@@ -370,6 +370,9 @@ game.PedestrianEntity  = me.Entity.extend({
 		var width = settings.width;
 		var height = settings.height;
 
+		settings.width = 16;
+		settings.height = 16;
+		
 		settings.spritewidth = settings.width = 32;
 		settings.height = settings.height = 32;
 
@@ -527,7 +530,8 @@ game.PedestrianEntity  = me.Entity.extend({
 				this.parado = false;
 			}
 		}
-		else if (response.b.name == 'mainplayer') {
+		else if (response.b.name == 'mainplayer' && Math.abs((Math.round(response.b.speed * 10)/10) * 10) > 10 && (response.overlapV.x > 10 || response.overlapV.y > 10)) {
+			//console.log(response);
 			game.data.gameovermessage = 'Você atropelou um pedestre! :(';
 			game.data.gameoverscreen = 'game_over_pedestrian';
 			me.state.change(me.state.GAMEOVER);
@@ -669,7 +673,7 @@ game.EnemyEntity = me.Entity.extend({
 				this.parado = false;
 			}
 		}
-		else if (response.b.name === "mainplayer") {
+		else if (response.b.name === "mainplayer" && Math.abs((Math.round(response.b.speed * 10)/10) * 10) > 10) {
 			if (response.b.speed > 0) {
 				if (this.tempoBatida <= me.timer.getTime() || this.tempoBatida == 0) {
 					me.audio.playTrack("crash", false, null, 0.1);

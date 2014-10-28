@@ -40,7 +40,7 @@ var game = {
 		me.pool.register("TrafficLightEntity", game.TrafficLightEntity);
 		me.pool.register("BusRoadEntity", game.BusRoadEntity);
 		me.pool.register("PassagerEntity", game.PassagerEntity);
-		// me.pool.register("PedestrianEntity", game.PedestrianEntity);
+		me.pool.register("PedestrianEntity", game.PedestrianEntity);
 		me.pool.register("EnemyEntity", game.EnemyEntity, 99);
 		// me.pool.register("PedestrianLightEntity", game.PedestrianLightEntity);
 		me.pool.register("StopEntity", game.StopEntity);
