@@ -650,7 +650,7 @@ game.EnemyEntity = me.Entity.extend({
 			if (!andarCima) this.body.vel.y = 0;
 		}
 		
-		me.collision.check(this, true, this.collideHandler.bind(this), true);
+		if (!(me.collision.check(this, true, this.collideHandler.bind(this), true))) this.parado = false;
 		
 		if (!this.parado) {
 			this.body.update(dt);
@@ -673,12 +673,14 @@ game.EnemyEntity = me.Entity.extend({
 				this.parado = false;
 			}
 		}
+		
 		else if (response.b.name === "mainplayer" && Math.abs((Math.round(response.b.speed * 10)/10) * 10) > 10) {
-			if (response.b.speed > 0) {
+			if (response.b.speed > 0 && response.b.batido) {
 				if (this.tempoBatida <= me.timer.getTime() || this.tempoBatida == 0) {
 					me.audio.playTrack("crash", false, null, 0.1);
 					this.tempoBatida = me.timer.getTime() + 1000;
 					game.data.money -= 100;
+					response.b.batido = true;
 				}
 			}
 			game.data.alertaFala = true;
@@ -689,10 +691,10 @@ game.EnemyEntity = me.Entity.extend({
 			response.b.body.accel.x = 0;
 			response.b.body.accel.y = 0;
 			
-			response.b.batido = true;
-			response.b.tempoBatido = me.timer.getTime()+10000;
 			
-			this.body.setVelocity(0, 0);
+			response.b.tempoBatido = me.timer.getTime()+5000;
+			
+			this.parado = true;
 			if (!me.input.isKeyPressed("down")) {
 				response.b.speed = 0;				
 			}
