@@ -43,9 +43,8 @@ var game = {
 		me.pool.register("PedestrianEntity", game.PedestrianEntity);
 		me.pool.register("EnemyEntity", game.EnemyEntity, 99);
 		me.pool.register("StopEntity", game.StopEntity);
-		me.pool.register("ArrowEntity", game.ArrowEntity, 99);
-		//me.pool.register("VelocityEntity", game.VelocityEntity);
-
+		me.pool.register("VelocityEntity", game.VelocityEntity);
+		
 		me.input.bindKey(me.input.KEY.UP, "up");
 		me.input.bindKey(me.input.KEY.LEFT,	"left");
 		me.input.bindKey(me.input.KEY.RIGHT, "right");

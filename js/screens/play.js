@@ -10,7 +10,7 @@ game.PlayScreen = me.ScreenObject.extend({
 		game.data.money = 300;
 		
 		this.HUD = new game.HUD.Container();
-		me.game.world.addChild(this.HUD);
+		me.game.world.addChild(this.HUD);		
 		
 		me.input.bindKey(me.input.KEY.P, "p", true);
 		me.input.bindKey(me.input.KEY.ESC, "esc", true);

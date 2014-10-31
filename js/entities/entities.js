@@ -1,6 +1,4 @@
 game.PlayerEntity = me.Entity.extend({
-	// SETA NO HUD!
-	// COLOCAR VELOCIDADE MÁXIMA
 	init:function (x, y, settings)
 	{
 		settings.width = 16;
@@ -24,46 +22,43 @@ game.PlayerEntity = me.Entity.extend({
 		
 		this.renderable.addAnimation("normal", [0]);
 		this.renderable.addAnimation("batido", [1]);
-		
 	},
-	// draw: function(ctx) {
-		// var context = ctx.getContext();
-		// var carro = me.loader.getImage("player"); 
+	draw: function(ctx) {
+		var context = ctx.getContext();
+		var carro = me.loader.getImage("player"); 
+		context.save();
+		context.translate(this.pos.x+8, this.pos.y+32);
+		context.rotate(this.angle);
 		
-		// var raio = 48;
+		if (this.batido) {
+			context.drawImage(carro, 32, 0, 32 , 64, -carro.width/2,-carro.width/2, 32,64);
+		}
+		else {
+			context.drawImage(carro, 0, 0, 32 , 64, -carro.width/2,-carro.width/2, 32,64);
+		 }
+		context.restore();
 		
-		// context.save();
-		// context.translate(this.pos.x+16, this.pos.y+32);
-		// context.rotate(this.angle);
+		var seta = me.loader.getImage("arrow"); 
+		var raio = 48;
+		entidadeJogador = me.game.world.getChildByName("mainPlayer")[0];
+		entidadePassageiro = me.game.world.getChildByName("passagerEntity")[0];
 		
-		// if (this.batido) {
-			// context.drawImage(carro, 32, 0, 32 , 64, -carro.width/2,-carro.width/2, 32,64);
-		// }
-		// else {
-			// context.drawImage(carro, 0, 0, 32 , 64, -carro.width/2,-carro.width/2, 32,64);
-		// }
-		
-		// context.restore();
-		
-		// var seta = me.loader.getImage("arrow"); 
-		
-		// var entidadePassageiro = me.game.world.getChildByName("passagerEntity")[0];
-		// entidadePassageiro.update();
-		// var anguloPassageiro = this.angleTo(entidadePassageiro) +  (90 * (Math.PI/180));
-		
-		// context.save();
-		// context.translate((this.pos.x+16) + raio * 0.9 * Math.cos(anguloPassageiro), (this.pos.y+32) + raio * 0.9 * Math.sin(anguloPassageiro));
-		
-		// context.rotate(anguloPassageiro);
-		// context.drawImage(seta, -seta.width*0.75, -seta.height * 0.5);
-		
-		// context.setTransform(1,0,0,1,0,0);
-		// context.restore();	
-	// },
+		entidadePassageiro.update();
+		var anguloPassageiro = entidadeJogador.angleTo(entidadePassageiro) +  (90 * (Math.PI/180));
+
+		var dx = entidadeJogador.pos.x + raio * Math.sin(anguloPassageiro);
+		var dy = entidadeJogador.pos.y - raio * Math.cos(anguloPassageiro);
+
+		context.save();
+		context.translate(dx, dy);
+		context.rotate(anguloPassageiro);
+		context.translate(-dx, -dy);
+		context.drawImage(seta, dx - seta.width / 2, dy - seta.height / 2);
+		context.restore();	
+	},
 	update : function (dt)
 	{
 		if (this.batido) {
-			console.log('oi');
 			this.renderable.setCurrentAnimation("batido");
 		}
 		else {
@@ -134,35 +129,6 @@ game.PlayerEntity = me.Entity.extend({
 		else if(this.speed > 0){
 			this.speed -= valor;
 		}
-	}
-});
-
-game.ArrowEntity = me.Entity.extend({
-	init:function (x, y, settings)
-	{
-		this._super(me.Entity, 'init', [x, y , settings]);
-		this.alwaysUpdate = true;
-	},
-	update: function() {
-		return true;
-	},
-	draw : function (ctx) {
-		var context = ctx.getContext();
-		var seta = me.loader.getImage("arrow"); 
-		var raio = 48;
-		var entidadeJogador = me.game.world.getChildByName("mainPlayer")[0];
-		var entidadePassageiro = me.game.world.getChildByName("passagerEntity")[0];
-		
-		entidadePassageiro.update();
-		var anguloPassageiro = entidadeJogador.angleTo(entidadePassageiro) +  (90 * (Math.PI/180));
-		
-		context.save();
-		context.translate((entidadeJogador.pos.x) + raio * 0.9 * Math.cos(anguloPassageiro), (entidadeJogador.pos.y) + raio * 0.9 * Math.sin(anguloPassageiro));
-		
-		context.rotate(anguloPassageiro);
-		context.drawImage(seta, -seta.width*0.75, -seta.height * 0.5);
-		context.setTransform(1,0,0,1,0,0);
-		context.restore();	
 	}
 });
 
@@ -573,7 +539,6 @@ game.PedestrianEntity  = me.Entity.extend({
 			}
 		}
 		else if (response.b.name == 'mainplayer' && Math.abs((Math.round(response.b.speed * 10)/10) * 10) > 10 && (response.overlapV.x > 10 || response.overlapV.y > 10)) {
-			//console.log(response);
 			game.data.gameovermessage = 'Você atropelou um pedestre! :(';
 			game.data.gameoverscreen = 'game_over_pedestrian';
 			me.state.change(me.state.GAMEOVER);
@@ -735,23 +700,17 @@ game.EnemyEntity = me.Entity.extend({
 				game.data.money -= 100;
 				game.data.mensagemAlerta = 'Você bateu em outro carro!';
 				game.data.subalerta = 'Você perdeu R$100,00';
-				response.b.body.vel.x *= 0.9;
-				response.b.body.vel.y *= 0.9;
-				response.b.body.accel.x *= 0.9;
-				response.b.body.accel.y *= 0.9;
+				response.b.speed = response.b.speed * 0.5;
+				response.b.body.vel.x = response.b.body.vel.x * 0.5;
+				response.b.body.vel.y = response.b.body.vel.y * 0.5;
+				response.b.body.accel.x = response.b.body.accel.x * 0.5;
+				response.b.body.accel.y = response.b.body.accel.y * 0.5;
 				
 				this.tempoParado = me.timer.getTime()+5000;
 				response.b.tempoBatido = me.timer.getTime()+5000;
 				
 				this.parado = true;
 			}
-			// if (!me.input.isKeyPressed("down")) {
-				// response.b.speed = 0;				
-			// }
-			
-			// if (response.b.speed != 0) {
-				// this.body.setVelocity(this.velocidade, this.velocidade);
-			// }
 		}
 	}
 });
@@ -772,12 +731,12 @@ game.StopEntity = me.Entity.extend({
 		if (response.b.name == 'mainplayer') {
 			if (this.tempo == 0) this.tempo = me.timer.getTime()+4000;
 			if (me.timer.getTime() >= this.tempo) {
-				game.data.money -= 86.13
-				game.data.score += 4;
+				game.data.money -= 127,69;
+				game.data.score += 5;
 				this.tempo = 0;
 				game.data.alertaFala = true;
 				game.data.mensagemAlerta = 'Você levou multa por parar em um local proibido';
-				game.data.subalerta = ' Você perdeu R$86,13 e teve 4 pontos na carteira.';
+				game.data.subalerta = ' Você perdeu R$127,69 e teve 5 pontos na carteira.';
 			}
 		}
 		else {
@@ -829,10 +788,10 @@ game.VelocityEntity = me.Entity.extend({
 					}
 					else if (velocidade > this.velocidadeMaxima50) {
 						game.data.score += 7;
-						game.data.money -= 574,72;
+						game.data.money -= 574,62;
 						game.data.alertaFala = true;
 						game.data.mensagemAlerta = 'Você levou uma multa por andar acima da velocidade da via!';
-						game.data.subalerta = ' Você perdeu R$574,72 e teve 7 pontos na carteira.';
+						game.data.subalerta = ' Você perdeu R$574,62 e teve 7 pontos na carteira.';
 					}
 				}
 			else if (me.timer.getTime() > this.tempo) {
