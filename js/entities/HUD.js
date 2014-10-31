@@ -11,8 +11,7 @@ game.HUD.Container = me.Container.extend({
 		this.addChild(new game.HUD.Alert(0, 0));
 		this.addChild(new game.HUD.ScoreItem(665, 565));
 		this.addChild(new game.HUD.Velocity(380, 565));
-		this.addChild(new game.HUD.Money(10,565));
-		//this.addChild(new game.HUD.Time(550, 0));
+		this.addChild(new game.HUD.Money(10,565));	
 	}
 });
 
@@ -45,6 +44,7 @@ game.HUD.Alert = me.Renderable.extend( {
 	desenharFonteCentro: function(contexto, texto, y, tamanhoFonte, cor) {					
 		this.text = texto;
 		this.font = new me.Font("Trebuchet MS", tamanhoFonte, cor);
+		contexto.lineWidth = 7;
 		var measureTitle = this.font.measureText(contexto, this.text);
 		this.font.draw(contexto, this.text, me.game.viewport.width/2 - measureTitle.width/2, y);
 		this.font.drawStroke(contexto, this.text, me.game.viewport.width/2 - measureTitle.width/2, y);

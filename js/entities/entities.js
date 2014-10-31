@@ -1,10 +1,12 @@
 game.PlayerEntity = me.Entity.extend({
+	// SETA NO HUD!
+	// COLOCAR VELOCIDADE MÁXIMA
 	init:function (x, y, settings)
 	{
 		settings.width = 16;
 		settings.height = 32;
 		
-		this.angle = 0;
+		this.angle = (90 * (Math.PI/180));
 		this._super(me.Entity, 'init', [x, y , settings]);
 		this.body.setVelocity(3, 3);
 		this.speed = 0;
@@ -20,43 +22,54 @@ game.PlayerEntity = me.Entity.extend({
 		this.batido = false;
 		this.tempoBatido = 0;
 		
+		this.renderable.addAnimation("normal", [0]);
+		this.renderable.addAnimation("batido", [1]);
+		
 	},
-	draw: function(ctx) {
-		var context = ctx.getContext();
-		var carro = me.loader.getImage("player"); 
+	// draw: function(ctx) {
+		// var context = ctx.getContext();
+		// var carro = me.loader.getImage("player"); 
 		
-		var raio = 48;
+		// var raio = 48;
 		
-		context.save();
-		context.translate(this.pos.x+16, this.pos.y+32);
-		context.rotate(this.angle);
+		// context.save();
+		// context.translate(this.pos.x+16, this.pos.y+32);
+		// context.rotate(this.angle);
 		
-		if (this.batido) {
-			context.drawImage(carro, 32, 0, 32 , 64, -carro.width/2,-carro.width/2, 32,64);
-		}
-		else {
-			context.drawImage(carro, 0, 0, 32 , 64, -carro.width/2,-carro.width/2, 32,64);
-		}
+		// if (this.batido) {
+			// context.drawImage(carro, 32, 0, 32 , 64, -carro.width/2,-carro.width/2, 32,64);
+		// }
+		// else {
+			// context.drawImage(carro, 0, 0, 32 , 64, -carro.width/2,-carro.width/2, 32,64);
+		// }
 		
-		context.restore();
+		// context.restore();
 		
-		var seta = me.loader.getImage("arrow"); 
+		// var seta = me.loader.getImage("arrow"); 
 		
-		var entidadePassageiro = me.game.world.getChildByName("passagerEntity")[0];
-		entidadePassageiro.update();
-		var anguloPassageiro = this.angleTo(entidadePassageiro) +  (90 * (Math.PI/180));
+		// var entidadePassageiro = me.game.world.getChildByName("passagerEntity")[0];
+		// entidadePassageiro.update();
+		// var anguloPassageiro = this.angleTo(entidadePassageiro) +  (90 * (Math.PI/180));
 		
-		context.save();
-		context.translate((this.pos.x+16) + raio * 0.9 * Math.cos(anguloPassageiro), (this.pos.y+32) + raio * 0.9 * Math.sin(anguloPassageiro));
+		// context.save();
+		// context.translate((this.pos.x+16) + raio * 0.9 * Math.cos(anguloPassageiro), (this.pos.y+32) + raio * 0.9 * Math.sin(anguloPassageiro));
 		
-		context.rotate(anguloPassageiro);
-		context.drawImage(seta, -seta.width*0.75, -seta.height * 0.5);
+		// context.rotate(anguloPassageiro);
+		// context.drawImage(seta, -seta.width*0.75, -seta.height * 0.5);
 		
-		context.setTransform(1,0,0,1,0,0);
-		context.restore();	
-	},
+		// context.setTransform(1,0,0,1,0,0);
+		// context.restore();	
+	// },
 	update : function (dt)
 	{
+		if (this.batido) {
+			console.log('oi');
+			this.renderable.setCurrentAnimation("batido");
+		}
+		else {
+			this.renderable.setCurrentAnimation("normal");
+		}
+		
 		if (this.batido && this.tempoBatido <= me.timer.getTime()) {
 			this.batido = false;
 		}
@@ -124,6 +137,35 @@ game.PlayerEntity = me.Entity.extend({
 	}
 });
 
+game.ArrowEntity = me.Entity.extend({
+	init:function (x, y, settings)
+	{
+		this._super(me.Entity, 'init', [x, y , settings]);
+		this.alwaysUpdate = true;
+	},
+	update: function() {
+		return true;
+	},
+	draw : function (ctx) {
+		var context = ctx.getContext();
+		var seta = me.loader.getImage("arrow"); 
+		var raio = 48;
+		var entidadeJogador = me.game.world.getChildByName("mainPlayer")[0];
+		var entidadePassageiro = me.game.world.getChildByName("passagerEntity")[0];
+		
+		entidadePassageiro.update();
+		var anguloPassageiro = entidadeJogador.angleTo(entidadePassageiro) +  (90 * (Math.PI/180));
+		
+		context.save();
+		context.translate((entidadeJogador.pos.x) + raio * 0.9 * Math.cos(anguloPassageiro), (entidadeJogador.pos.y) + raio * 0.9 * Math.sin(anguloPassageiro));
+		
+		context.rotate(anguloPassageiro);
+		context.drawImage(seta, -seta.width*0.75, -seta.height * 0.5);
+		context.setTransform(1,0,0,1,0,0);
+		context.restore();	
+	}
+});
+
 game.TrafficLightEntity = me.Entity.extend({
 	init:function (x, y, settings)
 	{	
@@ -158,7 +200,7 @@ game.TrafficLightEntity = me.Entity.extend({
 		this.renderable.setCurrentAnimation("red", function(){self.renderable.setCurrentAnimation("red"); self.status = "OK";})
 		this.alwaysUpdate = true;
 		
-		this.tempoMudaFarol = Math.floor((Math.random() * 5)+3);		
+		this.tempoMudaFarol = Math.floor((Math.random() * 5)+3);
 		
 		this.tempo = 0;
 		this.pontuou = false;
@@ -281,7 +323,7 @@ game.BusRoadEntity = me.Entity.extend({
 	},
 	collideHandler : function (response) {
 		if (response.b.name == 'mainplayer') {
-			if (this.tempo == 0) this.tempo = me.timer.getTime()+4000;
+			if (this.tempo == 0) this.tempo = me.timer.getTime()+3000;
 			if (me.timer.getTime() >= this.tempo) {
 				game.data.money -= 127.69;
 				game.data.score += 5;
@@ -585,13 +627,15 @@ game.EnemyEntity = me.Entity.extend({
 		this.updateBounds();
 
 		this.alwaysUpdate = true;
-		this.body.setVelocity(4, 4);
+		this.velocidade = Math.floor((Math.random() * 3)+5);
+		this.body.setVelocity(this.velocidade, this.velocidade);
 		this.parado = false;
+		this.semaforoParado = false;
 		this.direcao = settings.direcao === undefined ? "e" : settings.direcao;
 		this.tempoBatida = 0;
+		this.tempoParado = 0;
 	},
-	update : function (dt)
-	{
+	update : function (dt) {
 		if (this.tempoBatida <= me.timer.getTime()) {
 			me.audio.stop("crash");
 		}
@@ -650,9 +694,11 @@ game.EnemyEntity = me.Entity.extend({
 			if (!andarCima) this.body.vel.y = 0;
 		}
 		
-		if (!(me.collision.check(this, true, this.collideHandler.bind(this), true))) this.parado = false;
+		me.collision.check(this, true, this.collideHandler.bind(this), true)
 		
-		if (!this.parado) {
+		if (this.tempoParado < me.timer.getTime() || this.tempoParado == 0) this.parado = false;
+		
+		if (!this.parado && !this.semaforoParado) {
 			this.body.update(dt);
 		}
 		
@@ -667,41 +713,45 @@ game.EnemyEntity = me.Entity.extend({
 	collideHandler: function(response) {
 		if (response.b.name == 'trafficlightentity') {
 			if (response.b.renderable.isCurrentAnimation("red") && ((response.overlapN.y == 1 && response.overlapN.x == 0) || (response.overlapN.y == 0 && response.overlapN.x == 1))) {
-				this.parado = true;
+				this.semaforoParado = true;
 			}
 			else {
-				this.parado = false;
+				this.semaforoParado = false;
 			}
 		}
 		
-		else if (response.b.name === "mainplayer" && Math.abs((Math.round(response.b.speed * 10)/10) * 10) > 10) {
-			if (response.b.speed > 0 && response.b.batido) {
-				if (this.tempoBatida <= me.timer.getTime() || this.tempoBatida == 0) {
-					me.audio.playTrack("crash", false, null, 0.1);
-					this.tempoBatida = me.timer.getTime() + 1000;
-					game.data.money -= 100;
-					response.b.batido = true;
-				}
+		else if (response.b.name === "mainplayer") {
+			if (response.b.speed < 5) {
+				this.tempoParado = me.timer.getTime()+5000;
+				this.parado = true;
 			}
-			game.data.alertaFala = true;
-			game.data.mensagemAlerta = 'Você bateu em outro carro!';
-			game.data.subalerta = 'Você perdeu R$100,00';
-			response.b.body.vel.x = 0;
-			response.b.body.vel.y = 0;
-			response.b.body.accel.x = 0;
-			response.b.body.accel.y = 0;
+			else if (!this.parado) {
+				me.audio.playTrack("crash", false, null, 0.1);
+				this.tempoParado = me.timer.getTime()+ 2000;
+				this.tempoBatida = me.timer.getTime() + 1000;
+				response.b.batido = true;
 			
-			
-			response.b.tempoBatido = me.timer.getTime()+5000;
-			
-			this.parado = true;
-			if (!me.input.isKeyPressed("down")) {
-				response.b.speed = 0;				
+				game.data.alertaFala = true;
+				game.data.money -= 100;
+				game.data.mensagemAlerta = 'Você bateu em outro carro!';
+				game.data.subalerta = 'Você perdeu R$100,00';
+				response.b.body.vel.x *= 0.9;
+				response.b.body.vel.y *= 0.9;
+				response.b.body.accel.x *= 0.9;
+				response.b.body.accel.y *= 0.9;
+				
+				this.tempoParado = me.timer.getTime()+5000;
+				response.b.tempoBatido = me.timer.getTime()+5000;
+				
+				this.parado = true;
 			}
+			// if (!me.input.isKeyPressed("down")) {
+				// response.b.speed = 0;				
+			// }
 			
-			if (response.b.speed != 0) {
-				this.body.setVelocity(4, 4);
-			}
+			// if (response.b.speed != 0) {
+				// this.body.setVelocity(this.velocidade, this.velocidade);
+			// }
 		}
 	}
 });
